@@ -2,7 +2,7 @@
 
 This is a C++ test project based on original video game tetris. It is currently in developpment and definetely not buildable. It is largely based on the SFML Library.
 
-## SFML Readme Bellow:
+SFML Readme Bellow:
 
 # sfml-vscode-boilerplate
 A cross-platform [SFML](https://www.sfml-dev.org) 2.5.1 & C++17 build environment for [Visual Studio Code](https://code.visualstudio.com/)
