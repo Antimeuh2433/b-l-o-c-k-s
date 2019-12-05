@@ -5,35 +5,30 @@ int main() {
 	//render window
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(640, 960), "test", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(640, 960), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
-	sf::Clock clock;
-	while (window.isOpen()) {
-		//tile texture
-		sf::Texture tileTexture;
-		if (!tileTexture.loadFromFile("content/tile.png")) {
-			std::cout << "Can't load file content/tile.png" << std::endl;
-			window.close();
-			return 0;
-		}
-		sf::Sprite tileSprite;
-		tileSprite.setTexture(tileTexture);
-		tileSprite.setTextureRect(sf::IntRect(0, 0, 16, 16));
-		tileSprite.setScale(3, 3);
-		tileSprite.setColor(sf::Color(255, 0, 0));
-		tileSprite.setPosition(60, 45);
+	int changeX = 0;
+	int changeY = 0;
 
-		sf::Texture frameTexture;
-		if (!frameTexture.loadFromFile("content/frame.png")) {
-			std::cout << "Can't load file content/frame.png" << std::endl;
-			window.close();
-			return 0;
-		}
-		sf::Sprite frameSprite;
-		frameSprite.setTexture(frameTexture);
-		frameSprite.setScale(sf::Vector2f(2.f, 2.f));
-		frameSprite.setPosition(0, -30);
+	sf::Clock clock;
+
+	sf::Texture tileTexture;
+	if (!tileTexture.loadFromFile("content/tile.png")) {
+		std::cerr << "Can't load file content/tile.png" << std::endl;
+		window.close();
+		return 0;
+	}
+
+	sf::Sprite tileSprite;
+	tileSprite.setTexture(tileTexture);
+	tileSprite.setTextureRect(sf::IntRect(0, 0, 16, 16));
+	tileSprite.setScale(2, 2);
+	tileSprite.setColor(sf::Color(255, 0, 0));
+	tileSprite.setPosition(60, 45);
+
+
+	while (window.isOpen()) {
 
 		//event handling
 		sf::Event event;
@@ -46,7 +41,13 @@ int main() {
 				if (event.key.code == sf::Keyboard::Escape) {
 					window.close();
 				} else if (event.key.code == sf::Keyboard::W) {
-					std::cout << "W" << std::endl;
+					changeY = -32;
+				} else if (event.key.code == sf::Keyboard::A) {
+					changeX = -32;
+				} else if (event.key.code == sf::Keyboard::S) {
+					changeY = 32;
+				} else if (event.key.code == sf::Keyboard::D) {
+					changeX = 32;
 				}
 			}
 		}
@@ -56,9 +57,11 @@ int main() {
 
 			clock.restart();
 		}
+		tileSprite.move(changeX, changeY);
+		changeX = 0;
+		changeY = 0;
 		window.clear(sf::Color::Black);
 		window.draw(tileSprite);
-		window.draw(frameSprite);
 		window.display();
 	}
 	return 0;
