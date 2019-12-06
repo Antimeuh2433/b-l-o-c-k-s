@@ -3,6 +3,7 @@
 #include "Main.hpp"
 
 int main() {
+	srand(time(NULL));
 	//render window
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
@@ -14,6 +15,9 @@ int main() {
 
 	sf::Clock clock;
 
+	//create color vector
+	std::vector<sf::Color> colors = {sf::Color::White, sf::Color::Red, sf::Color::Blue, sf::Color::Yellow, sf::Color::Magenta, sf::Color::Green, sf::Color::Cyan, sf::Color(255,165,0)};
+
 	//create sprite vector
 	sf::Texture tileTexture;
 	if (!tileTexture.loadFromFile("content/tile.png")) {
@@ -21,10 +25,12 @@ int main() {
 		return 0;
 	}
 	std::vector<sf::Sprite> sprites;
+
 	//create first sprite
 	sprites.push_back(sf::Sprite(tileTexture));
-	sprites[0].setColor(sf::Color::Red);
 	sprites[0].setScale(2.f, 2.f);
+	sprites[0].setColor(colors[(rand() % 9) - 1]);
+
 
 	while (window.isOpen()) {
 
@@ -52,11 +58,21 @@ int main() {
 			sprites[sprites.size() - 1].move(0, 32);
 			clock.restart();
 		}
+		//move
+		sf::Vector2f position = sprites[sprites.size() - 1].getPosition();
+		if (position.y >= 700) {
+			sprites.push_back(sf::Sprite(tileTexture));
+			sprites[sprites.size() - 1].setScale(2.f, 2.f);
+			sprites[sprites.size() - 1].setColor(colors[(rand() % 9) - 1]);
+		}
 		sprites[sprites.size() - 1].move(changeX, changeY);
 		changeX = 0;
 		changeY = 0;
+
 		window.clear(sf::Color::Black);
-		window.draw(sprites[sprites.size() - 1]);
+		for (int i = 0; i < int(sprites.size()); i++) {
+			window.draw(sprites[i]);
+		}
 		window.display();
 	}
 	return 0;
