@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "Main.hpp"
 
 int main() {
@@ -13,20 +14,17 @@ int main() {
 
 	sf::Clock clock;
 
+	//create sprite vector
 	sf::Texture tileTexture;
 	if (!tileTexture.loadFromFile("content/tile.png")) {
-		std::cerr << "Can't load file content/tile.png" << std::endl;
-		window.close();
+		std::cerr << "Can't open content/tile.png" << std::endl;
 		return 0;
 	}
-
-	sf::Sprite tileSprite;
-	tileSprite.setTexture(tileTexture);
-	tileSprite.setTextureRect(sf::IntRect(0, 0, 16, 16));
-	tileSprite.setScale(2, 2);
-	tileSprite.setColor(sf::Color(255, 0, 0));
-	tileSprite.setPosition(60, 45);
-
+	std::vector<sf::Sprite> sprites;
+	//create first sprite
+	sprites.push_back(sf::Sprite(tileTexture));
+	sprites[0].setColor(sf::Color::Red);
+	sprites[0].setScale(2.f, 2.f);
 
 	while (window.isOpen()) {
 
@@ -40,8 +38,6 @@ int main() {
 			else if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) {
 					window.close();
-				} else if (event.key.code == sf::Keyboard::W) {
-					changeY = -32;
 				} else if (event.key.code == sf::Keyboard::A) {
 					changeX = -32;
 				} else if (event.key.code == sf::Keyboard::S) {
@@ -53,15 +49,14 @@ int main() {
 		}
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000) {
-
-
+			sprites[sprites.size() - 1].move(0, 32);
 			clock.restart();
 		}
-		tileSprite.move(changeX, changeY);
+		sprites[sprites.size() - 1].move(changeX, changeY);
 		changeX = 0;
 		changeY = 0;
 		window.clear(sf::Color::Black);
-		window.draw(tileSprite);
+		window.draw(sprites[sprites.size() - 1]);
 		window.display();
 	}
 	return 0;
