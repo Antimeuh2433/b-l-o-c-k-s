@@ -29,7 +29,7 @@ int main() {
 	//create first sprite
 	sprites.push_back(sf::Sprite(tileTexture));
 	sprites[0].setScale(2.f, 2.f);
-	sprites[0].setColor(colors[(rand() % 7) - 1]);
+	sprites[0].setColor(colors[rand() % 7]);
 
 
 	while (window.isOpen()) {
@@ -68,7 +68,7 @@ int main() {
 				//create next tile
 				sprites.push_back(sf::Sprite(tileTexture));
 				sprites[sprites.size() - 1].setScale(2.f, 2.f);
-				sprites[sprites.size() - 1].setColor(colors[(rand() % 7) - 1]);
+				sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
 			}
 		}
 		//if current tile touches bottom
@@ -76,7 +76,7 @@ int main() {
 			//create next tile
 			sprites.push_back(sf::Sprite(tileTexture));
 			sprites[sprites.size() - 1].setScale(2.f, 2.f);
-			sprites[sprites.size() - 1].setColor(colors[(rand() % 7) - 1]);
+			sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
 		}
 		//move with keyboard entries
 		sprites[sprites.size() - 1].move(changeX, changeY);
