@@ -7,7 +7,7 @@ int main() {
 	//create and render window
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(640, 960), "BLOCKS!", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(320, 640), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
 	int changeX = 0;
@@ -30,6 +30,7 @@ int main() {
 	sprites.push_back(sf::Sprite(tileTexture));
 	sprites[0].setScale(2.f, 2.f);
 	sprites[0].setColor(colors[rand() % 7]);
+	sprites[0].setPosition(128, 0);
 
 
 	while (window.isOpen()) {
@@ -53,14 +54,16 @@ int main() {
 				}
 			}
 		}
-		//move downwards after 1sec
+		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000) {
+			//moves downwards after 1 sec if possible
 			sprites[sprites.size() - 1].move(0, 32);
 			clock.restart();
 		}
 
 		sf::Vector2f position = sprites[sprites.size() - 1].getPosition();
+		sf::Vector2f otherTilePos;
 		for (int i = 0; i < int(sprites.size()); i++) {
 			//if current tile is in other tile
 			sf::Vector2f otherTilesPos = sprites[i].getPosition();
@@ -69,14 +72,27 @@ int main() {
 				sprites.push_back(sf::Sprite(tileTexture));
 				sprites[sprites.size() - 1].setScale(2.f, 2.f);
 				sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
+				sprites[sprites.size() - 1].setPosition(128, 0);
+			}
+
+			//if tile spawns directly in other tile
+			for (int i = 0; i < int(sprites.size() - 1); i++) {
+				//if spawns on other tile
+				sf::Vector2f otherTilePos = sprites[i].getPosition();
+				if (position.y == otherTilePos.y and position.y == 0 and position.x == otherTilePos.x) {
+					//game over
+					std::cout << "Game over!";
+					window.close();
+				}
 			}
 		}
 		//if current tile touches bottom
-		if (position.y >= 700) {
+		if (position.y >= 586) {
 			//create next tile
 			sprites.push_back(sf::Sprite(tileTexture));
 			sprites[sprites.size() - 1].setScale(2.f, 2.f);
 			sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
+			sprites[sprites.size() - 1].setPosition(128, 0);
 		}
 		//move with keyboard entries
 		sprites[sprites.size() - 1].move(changeX, changeY);
