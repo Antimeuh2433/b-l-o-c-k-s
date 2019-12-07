@@ -63,7 +63,6 @@ int main() {
 		}
 
 		sf::Vector2f position = sprites[sprites.size() - 1].getPosition();
-		sf::Vector2f otherTilePos;
 		for (int i = 0; i < int(sprites.size()); i++) {
 			//if current tile is in other tile
 			sf::Vector2f otherTilesPos = sprites[i].getPosition();
@@ -83,6 +82,7 @@ int main() {
 					//game over
 					std::cout << "Game over!";
 					window.close();
+					return 0;
 				}
 			}
 		}
@@ -93,6 +93,13 @@ int main() {
 			sprites[sprites.size() - 1].setScale(2.f, 2.f);
 			sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
 			sprites[sprites.size() - 1].setPosition(128, 0);
+		}
+		//block movement on x axis if a tile is already in place there
+		for (int i = 0; i < int(sprites.size() - 1); i++) {
+			sf::Vector2f otherTilePos = sprites[i].getPosition();
+			if (position.x + changeX == otherTilePos.x and position.y == otherTilePos.y) {
+				changeX = 0;
+			}
 		}
 		//move with keyboard entries
 		sprites[sprites.size() - 1].move(changeX, changeY);
