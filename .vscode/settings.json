@@ -42,7 +42,9 @@
 		"fstream": "cpp",
 		"atomic": "cpp",
 		"ios": "cpp",
-		"*.tcc": "cpp"
+		"*.tcc": "cpp",
+		"ostream": "cpp",
+		"vector": "cpp"
 	},
 
 	"terminal.integrated.shell.windows": "C:/Program Files/Git/bin/bash.exe",
