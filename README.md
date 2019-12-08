@@ -14,5 +14,5 @@ Well there isn't much to compile right now, but you can try building the SFML li
 Just leave them :D
 
 ## License
-GNU GPL version 3 or any later version
+GNU GPL version 3 or any later version. 
 See LICENSE.
