@@ -1,6 +1,60 @@
+// B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
+// Copyright (C) 2019  Justin BAX
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+
 #include <iostream>
 #include <vector>
 #include "Main.hpp"
+
+bool shapes[7][8] = {
+	{false, true, false, false, true, true, true, false}, // |-
+	{true, false, false, false, true, true, true, false}, // |__
+	{false, false, true, false, true, true, true, false}, // __|
+	{true, true, false, false, true, true, false, false}, // o
+	{true, true, false, false, false, true, true, false}, // -_
+	{false, true, true, false, true, true, false, false}, // _-
+	{true, true, true, true, false, false, false, false} // ----
+};
+
+//color vector
+std::vector<sf::Color> colors = {sf::Color::White, sf::Color::Red, sf::Color::Blue, sf::Color::Yellow, sf::Color::Magenta, sf::Color::Green, sf::Color::Cyan, sf::Color(255, 165, 0)};
+
+//sprite vector
+std::vector<sf::Sprite> sprites;
+
+//initialize tile texture
+sf::Texture tile;
+
+void createTiles() {
+	int shapenum = rand() % 7;
+	int colornum = rand() % 8;
+	for (int i = 0; i < 8; i++) {
+		if (shapes[shapenum][i]) {
+			sprites.push_back(sf::Sprite(tile));
+			sprites[sprites.size() - 1].setScale(2.f, 2.f);
+			sprites[sprites.size() - 1].setColor(colors[colornum]);
+			if (i < 4) {
+				sprites[sprites.size() - 1].setPosition(i * 32 + 96, 0);
+			} else {
+				sprites[sprites.size() - 1].setPosition((i - 4) * 32 + 96, 32);
+			}
+		}
+	}
+}
 
 int main() {
 	srand(time(NULL));
@@ -15,23 +69,14 @@ int main() {
 
 	sf::Clock clock;
 
-	//create color vector
-	std::vector<sf::Color> colors = {sf::Color::White, sf::Color::Red, sf::Color::Blue, sf::Color::Yellow, sf::Color::Magenta, sf::Color::Green, sf::Color::Cyan};
-
-	//create sprite vector
-	sf::Texture tileTexture;
-	if (!tileTexture.loadFromFile("content/tile.png")) {
-		std::cerr << "Can't open content/tile.png" << std::endl;
+	//define tile texture
+	if (!tile.loadFromFile("content/tile.png")) {
+		std::cerr << "Can't load content/tile.png" << std::endl;
 		return 0;
 	}
-	std::vector<sf::Sprite> sprites;
 
-	//create first sprite
-	sprites.push_back(sf::Sprite(tileTexture));
-	sprites[0].setScale(2.f, 2.f);
-	sprites[0].setColor(colors[rand() % 7]);
-	sprites[0].setPosition(128, 0);
-
+	//create first tiles
+	createTiles();
 
 	while (window.isOpen()) {
 
@@ -51,58 +96,61 @@ int main() {
 					changeY = 32;
 				} else if (event.key.code == sf::Keyboard::D) {
 					changeX = 32;
+				} else if (event.key.code == sf::Keyboard::Space or event.key.code == sf::Keyboard::W) {
+					//rotate
 				}
 			}
 		}
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000) {
-			//moves downwards after 1 sec if possible
-			sprites[sprites.size() - 1].move(0, 32);
+			//moves downwards
+			for (int i = 1; i <= 4; i++) {
+				sprites[sprites.size() - i].move(0, 32);
+			}
 			clock.restart();
 		}
 
-		sf::Vector2f position = sprites[sprites.size() - 1].getPosition();
-		for (int i = 0; i < int(sprites.size()); i++) {
-			//if current tile is in other tile
+		sf::Vector2f position1 = sprites[sprites.size() - 1].getPosition();
+		sf::Vector2f position2 = sprites[sprites.size() - 2].getPosition();
+		sf::Vector2f position3 = sprites[sprites.size() - 3].getPosition();
+		sf::Vector2f position4 = sprites[sprites.size() - 4].getPosition();
+
+		for (int i = 0; i < int(sprites.size() - 4); i++) {
+
 			sf::Vector2f otherTilesPos = sprites[i].getPosition();
-			if (position.y + 32 == otherTilesPos.y and position.x == otherTilesPos.x) {
-				//create next tile
-				sprites.push_back(sf::Sprite(tileTexture));
-				sprites[sprites.size() - 1].setScale(2.f, 2.f);
-				sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
-				sprites[sprites.size() - 1].setPosition(128, 0);
-			}
 
 			//if tile spawns directly in other tile
-			for (int i = 0; i < int(sprites.size() - 1); i++) {
-				//if spawns on other tile
-				sf::Vector2f otherTilePos = sprites[i].getPosition();
-				if (position.y == otherTilePos.y and position.y == 0 and position.x == otherTilePos.x) {
-					//game over
-					std::cout << "Game over!";
-					window.close();
-					return 0;
-				}
+			if ((position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x)) {
+				std::cout << "Game over!";
+				window.close();
+				return 0;
 			}
-		}
-		//if current tile touches bottom
-		if (position.y >= 586) {
-			//create next tile
-			sprites.push_back(sf::Sprite(tileTexture));
-			sprites[sprites.size() - 1].setScale(2.f, 2.f);
-			sprites[sprites.size() - 1].setColor(colors[rand() % 7]);
-			sprites[sprites.size() - 1].setPosition(128, 0);
-		}
-		//block movement on x axis if a tile is already in place there
-		for (int i = 0; i < int(sprites.size() - 1); i++) {
-			sf::Vector2f otherTilePos = sprites[i].getPosition();
-			if (position.x + changeX == otherTilePos.x and position.y == otherTilePos.y) {
+
+			//if current tile is on other tile
+			if ((position1.y + 32 == otherTilesPos.y and position1.x == otherTilesPos.x) or (position2.y + 32 == otherTilesPos.y and position2.x == otherTilesPos.x) or (position3.y + 32 == otherTilesPos.y and position3.x == otherTilesPos.x) or (position4.y + 32 == otherTilesPos.y and position4.x == otherTilesPos.x)) {
+				createTiles();
+				position1 = sprites[sprites.size() - 1].getPosition();
+				position2 = sprites[sprites.size() - 2].getPosition();
+				position3 = sprites[sprites.size() - 3].getPosition();
+				position4 = sprites[sprites.size() - 4].getPosition();
+			}
+
+			//block movement on x axis if a tile is already there
+			if ((position1.x + changeX == otherTilesPos.x and position1.y == otherTilesPos.y) or (position2.x + changeX == otherTilesPos.x and position2.y == otherTilesPos.y) or (position3.x + changeX == otherTilesPos.x and position3.y == otherTilesPos.y) or (position4.x + changeX == otherTilesPos.x and position4.y == otherTilesPos.y)) {
 				changeX = 0;
 			}
 		}
+
+		//if current tile touches bottom
+		if (position1.y >= 586 or position2.y >= 586 or position3.y >= 586 or position4.y >= 586) {
+			createTiles();
+		}
+
 		//move with keyboard entries
-		sprites[sprites.size() - 1].move(changeX, changeY);
+		for (int i = 1; i < 5; i++) {
+			sprites[sprites.size() - i].move(changeX, changeY);
+		}
 		changeX = 0;
 		changeY = 0;
 

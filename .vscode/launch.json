@@ -1,6 +1,7 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+		
 		{
 			"name": "GDB/LLDB",
 			"type": "cppdbg",
@@ -41,7 +42,10 @@
 				"MIMode": "lldb",
 				"env": {
 					"PATH": "${config:terminal.integrated.env.osx.PATH}",
-				}
+				},
+				//start test
+				"stopAtEntry": true
+				//end test
 			},
 		}
 	]
