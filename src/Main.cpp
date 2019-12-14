@@ -19,7 +19,7 @@
 #include "Main.hpp"
 
 bool shapes[7][8] = {
-	{false, true, false, false, true, true, true, false}, // |-
+	{false, true, false, false, true, true, true, false}, // |--
 	{true, false, false, false, true, true, true, false}, // |__
 	{false, false, true, false, true, true, true, false}, // __|
 	{true, true, false, false, true, true, false, false}, // o
@@ -63,7 +63,7 @@ int main() {
 	window.setVerticalSyncEnabled(true);
 
 	int changeX = 0;
-	int changeY = 0;
+	bool changeY = false;
 
 	sf::Clock clock;
 
@@ -91,7 +91,7 @@ int main() {
 				} else if (event.key.code == sf::Keyboard::A) {
 					changeX = -32;
 				} else if (event.key.code == sf::Keyboard::S) {
-					changeY = 32;
+					changeY = true;
 				} else if (event.key.code == sf::Keyboard::D) {
 					changeX = 32;
 				} else if (event.key.code == sf::Keyboard::Space or event.key.code == sf::Keyboard::W) {
@@ -101,12 +101,13 @@ int main() {
 		}
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
-		if (elapsed.asMilliseconds() >= 1000) {
+		if (elapsed.asMilliseconds() >= 1000 or changeY) {
 			//moves downwards
 			for (int i = 1; i <= 4; i++) {
 				sprites[sprites.size() - i].move(0, 32);
 			}
 			clock.restart();
+			changeY = false;
 		}
 
 		sf::Vector2f position1 = sprites[sprites.size() - 1].getPosition();
@@ -126,7 +127,10 @@ int main() {
 			}
 
 			//if current tile is on other tile
-			if ((position1.y + 32 == otherTilesPos.y and position1.x == otherTilesPos.x) or (position2.y + 32 == otherTilesPos.y and position2.x == otherTilesPos.x) or (position3.y + 32 == otherTilesPos.y and position3.x == otherTilesPos.x) or (position4.y + 32 == otherTilesPos.y and position4.x == otherTilesPos.x)) {
+			if ((position1.y == otherTilesPos.y and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.x == otherTilesPos.x)) {
+				for (int i = 1; i < 5; i++) {
+					sprites[sprites.size() - i].move(0, -32);
+				}
 				createTiles();
 				position1 = sprites[sprites.size() - 1].getPosition();
 				position2 = sprites[sprites.size() - 2].getPosition();
@@ -140,17 +144,24 @@ int main() {
 			}
 		}
 
+		//block movement on x axis if on border
+		if ((position1.x == 0 and changeX < 0) or (position2.x == 0 and changeX < 0) or (position3.x == 0 and changeX < 0) or (position4.x == 0 and changeX < 0) or (position1.x == 288 and changeX > 0) or (position2.x == 288 and changeX > 0) or (position3.x == 288 and changeX > 0) or (position4.x == 288 and changeX > 0)) {
+			changeX = 0;
+		}
+
 		//if current tile touches bottom
-		if (position1.y >= 586 or position2.y >= 586 or position3.y >= 586 or position4.y >= 586) {
+		if (position1.y >= 640 or position2.y >= 640 or position3.y >= 640 or position4.y >= 640) {
+			for (int i = 0; i < 5; i++) {
+				sprites[sprites.size() - i].move(0, -32);
+			}
 			createTiles();
 		}
 
 		//move with keyboard entries
 		for (int i = 1; i < 5; i++) {
-			sprites[sprites.size() - i].move(changeX, changeY);
+			sprites[sprites.size() - i].move(changeX, 0);
 		}
 		changeX = 0;
-		changeY = 0;
 
 		//window display
 		window.clear(sf::Color::Black);
