@@ -19,32 +19,35 @@
 #include "Main.hpp"
 
 bool shapes[7][8] = {
-	{false, true, false, false, true, true, true, false}, // |--
-	{true, false, false, false, true, true, true, false}, // |__
-	{false, false, true, false, true, true, true, false}, // __|
-	{true, true, false, false, true, true, false, false}, // o
-	{true, true, false, false, false, true, true, false}, // -_
-	{false, true, true, false, true, true, false, false}, // _-
-	{true, true, true, true, false, false, false, false} // ----
+	{true, true, true, false, false, true, false, false}, // T
+	{true, true, true, false, false, false, true, false}, // J
+	{true, true, true, false, true, false, false, false}, // L
+	{false, true, true, false, false, true, true, false}, // O
+	{true, true, false, false, false, true, true, false}, // Z
+	{false, true, true, false, true, true, false, false}, // S
+	{true, true, true, true, false, false, false, false} // I
 };
 
 //color vector
-std::vector<sf::Color> colors = {sf::Color::White, sf::Color::Red, sf::Color::Blue, sf::Color::Yellow, sf::Color::Magenta, sf::Color::Green, sf::Color::Cyan, sf::Color(255, 165, 0)};
+std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color::Blue, sf::Color(255,165,0), sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};
 
 //sprite vector
 std::vector<sf::Sprite> sprites;
+
+//shape vector
+std::vector<int> shapes_sprites;
 
 //initialize tile texture
 sf::Texture tile;
 
 void createTiles() {
 	int shapenum = rand() % 7;
-	int colornum = rand() % 8;
+	shapes_sprites.push_back(shapenum);
 	for (int i = 0; i < 8; i++) {
 		if (shapes[shapenum][i]) {
 			sprites.push_back(sf::Sprite(tile));
 			sprites[sprites.size() - 1].setScale(2.f, 2.f);
-			sprites[sprites.size() - 1].setColor(colors[colornum]);
+			sprites[sprites.size() - 1].setColor(colors[shapenum]);
 			if (i < 4) {
 				sprites[sprites.size() - 1].setPosition(i * 32 + 96, 0);
 			} else {
@@ -96,6 +99,9 @@ int main() {
 					changeX = 32;
 				} else if (event.key.code == sf::Keyboard::Space or event.key.code == sf::Keyboard::W) {
 					//rotate
+					switch (shapes_sprites[shapes_sprites.size() - 1]) {
+
+					}
 				}
 			}
 		}
