@@ -7,9 +7,10 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/lib",
                 "${workspaceFolder}/test",
-                "~/SFML-2.5.1/include",
+                "/usr/include/SFML",
                 "/usr/local/include/**",
-                "/usr/include/**"
+                "/usr/include/**",
+                "/usr/include"
             ],
             "defines": [
                 "_DEBUG"
