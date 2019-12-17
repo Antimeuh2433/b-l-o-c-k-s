@@ -20,7 +20,7 @@
             "forcedInclude": [
                 "${workspaceFolder}/src/PCH.hpp"
             ],
-            "compilerPath": "/bin/g++"
+            "compilerPath": "/usr/bin/gcc"
         },
         {
             "name": "Mac",
