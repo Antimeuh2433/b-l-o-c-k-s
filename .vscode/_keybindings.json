@@ -1,4 +1,4 @@
-// Place your key bindings in this file to overwrite the defaults
+
 [
 	{
 		"key": "f8",
@@ -53,5 +53,5 @@
 		"key": "shift+f10",
 		"command": "workbench.action.tasks.runTask",
 		"args": "Run: Debug"
-	},
+	}
 ]
