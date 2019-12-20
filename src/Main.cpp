@@ -169,6 +169,37 @@ int main() {
 		}
 		changeX = 0;
 
+		//destroy completed line
+		std::vector<int> spritesInRow;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < int(sprites.size()); j++) {
+				if (sprites[j].getPosition().y == 32 * i) {
+					spritesInRow.push_back(j);
+				}
+			}
+			if (spritesInRow.size() == 10) {
+				for (int a = 0; a < 10; a++) {
+					sprites[int(spritesInRow[a])].setOrigin(2, 2);
+				}
+				int spritesSize = int(sprites.size());
+				for (int b = 0; b < spritesSize; b++) {
+					if (sprites[b].getOrigin() == sf::Vector2f(2, 2)) {
+						sprites.erase(sprites.begin() + b);
+						spritesSize--;
+						b--;
+					}
+				}
+				for (int c = 0; c < spritesSize; c++) {
+					sprites[c].setOrigin(0, 0);
+					if (sprites[c].getPosition().y < 32 * i) {
+						sprites[c].move(0, 32);
+					}
+				}
+				createTiles();
+			}
+			spritesInRow.clear();
+		}
+
 		//window display
 		window.clear(sf::Color::Black);
 		for (int i = 0; i < int(sprites.size()); i++) {
