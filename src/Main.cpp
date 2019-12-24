@@ -40,8 +40,37 @@ std::vector<int> shapes_sprites;
 //initialize tile texture
 sf::Texture tile;
 
+int rotation;
+
+void rotate() {
+	sf::Vector2f center = sprites[sprites.size() - 3].getPosition();
+	switch (shapes_sprites[shapes_sprites.size() - 1]) {
+		case 0:
+			for (int i = 1; i < 5; i++) {
+				if (i == 3) {
+				} else if (sprites[sprites.size() - i].getPosition().x == center.x - 32 and sprites[sprites.size() - 1].getPosition().y == center.y) {
+					//left of center
+					sprites[sprites.size() - i].move(32, -32);
+				} else if (sprites[sprites.size() - i].getPosition().x == center.x and sprites[sprites.size() - i].getPosition().y == center.y - 32) {
+					//top of center
+					sprites[sprites.size() - i].move(32, 32);
+				} else if (sprites[sprites.size() - i].getPosition().x == center.x + 32 and sprites[sprites.size() - i].getPosition().y) {
+					//right of center
+					sprites[sprites.size() - i].move(-32, 32);
+				} else {
+					//bottom of center
+					sprites[sprites.size() - i].move(-32, -32);
+				}
+			}
+			break;
+		default:
+			std::cerr << "no giving you r o t a t i o n" << std::endl;
+	}
+}
+
 void createTiles() {
-	int shapenum = rand() % 7;
+	rotation = 0;
+	int shapenum = (rand() % 7);
 	shapes_sprites.push_back(shapenum);
 	for (int i = 0; i < 8; i++) {
 		if (shapes[shapenum][i]) {
@@ -82,29 +111,35 @@ int main() {
 	while (window.isOpen()) {
 
 		//event handling
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
+		sf::Event evnt;
+		while (window.pollEvent(evnt)) {
+			if (evnt.type == sf::Event::Closed) {
 				window.close();
 			}
 			//key pressed event
-			else if (event.type == sf::Event::KeyPressed) {
-				if (event.key.code == sf::Keyboard::Escape) {
+			else if (evnt.type == sf::Event::KeyPressed) {
+				if (evnt.key.code == sf::Keyboard::Escape) {
 					window.close();
-				} else if (event.key.code == sf::Keyboard::A) {
+				} else if (evnt.key.code == sf::Keyboard::A) {
 					changeX = -32;
-				} else if (event.key.code == sf::Keyboard::S) {
+				} else if (evnt.key.code == sf::Keyboard::S) {
 					changeY = true;
-				} else if (event.key.code == sf::Keyboard::D) {
-					changeX = 32;
-				} else if (event.key.code == sf::Keyboard::Space or event.key.code == sf::Keyboard::W) {
-					//rotate
-					switch (shapes_sprites[shapes_sprites.size() - 1]) {
-
+					for (int i = 1; i < 5; i++) {
+						sprites[sprites.size() - i].move(0, 32);
 					}
+				} else if (evnt.key.code == sf::Keyboard::D) {
+					changeX = 32;
+				} else if (evnt.key.code == sf::Keyboard::Space or evnt.key.code == sf::Keyboard::W) {
+					//rotate
+					rotation += 90;
+					if (rotation == 360) {
+						rotation = 0;
+					}
+					rotate();
 				}
 			}
 		}
+		/*
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000 or changeY) {
@@ -115,7 +150,7 @@ int main() {
 			clock.restart();
 			changeY = false;
 		}
-
+		*/
 		sf::Vector2f position1 = sprites[sprites.size() - 1].getPosition();
 		sf::Vector2f position2 = sprites[sprites.size() - 2].getPosition();
 		sf::Vector2f position3 = sprites[sprites.size() - 3].getPosition();
