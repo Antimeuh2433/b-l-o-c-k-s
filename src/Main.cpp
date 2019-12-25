@@ -94,6 +94,13 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(320, 640), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
+	//set window icon
+	sf::Image icon;
+	if (!icon.loadFromFile("content/icon.png")) {
+		std::cerr << "Can't load content/icon.png" << std::endl;
+	}
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
 	int changeX = 0;
 	bool changeY = false;
 
