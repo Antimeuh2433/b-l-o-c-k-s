@@ -40,36 +40,31 @@ std::vector<int> shapes_sprites;
 //initialize tile texture
 sf::Texture tile;
 
-int rotation;
-
 void rotate() {
-	sf::Vector2f center = sprites[sprites.size() - 3].getPosition();
-	switch (shapes_sprites[shapes_sprites.size() - 1]) {
-		case 0:
-			for (int i = 1; i < 5; i++) {
-				if (i == 3) {
-				} else if (sprites[sprites.size() - i].getPosition().x == center.x - 32 and sprites[sprites.size() - 1].getPosition().y == center.y) {
-					//left of center
-					sprites[sprites.size() - i].move(32, -32);
-				} else if (sprites[sprites.size() - i].getPosition().x == center.x and sprites[sprites.size() - i].getPosition().y == center.y - 32) {
-					//top of center
-					sprites[sprites.size() - i].move(32, 32);
-				} else if (sprites[sprites.size() - i].getPosition().x == center.x + 32 and sprites[sprites.size() - i].getPosition().y) {
-					//right of center
-					sprites[sprites.size() - i].move(-32, 32);
-				} else {
-					//bottom of center
-					sprites[sprites.size() - i].move(-32, -32);
-				}
+	sf::Vector2f center = sprites[sprites.size() - 2].getPosition();
+	sf::Vector2f currentPos, otherTilePos;
+	bool canRotate = true;
+	int newX[4], newY[4];
+	for (int i = 1; i < 5; i++) {
+		currentPos = sprites[sprites.size() - i].getPosition();
+		newX[i - 1] = center.x - (currentPos.y - center.y);
+		newY[i - 1] = center.y + (currentPos.x - center.x);
+		for (int i = 0; i < int(sprites.size() - 5); i++) {
+			otherTilePos = sprites[i].getPosition();
+			if (otherTilePos.x == currentPos.x and otherTilePos.y == currentPos.y) {
+				canRotate = false;
+				break;
 			}
-			break;
-		default:
-			std::cerr << "no giving you r o t a t i o n" << std::endl;
+		}
+	}
+	if (canRotate) {
+		for (int i = 1; i < 5; i++) {
+			sprites[sprites.size() - i].setPosition(newX[i - 1], newY[i - 1]);
+		}
 	}
 }
 
 void createTiles() {
-	rotation = 0;
 	int shapenum = (rand() % 7);
 	shapes_sprites.push_back(shapenum);
 	for (int i = 0; i < 8; i++) {
@@ -131,22 +126,15 @@ int main() {
 					changeX = -32;
 				} else if (evnt.key.code == sf::Keyboard::S) {
 					changeY = true;
-					for (int i = 1; i < 5; i++) {
-						sprites[sprites.size() - i].move(0, 32);
-					}
 				} else if (evnt.key.code == sf::Keyboard::D) {
 					changeX = 32;
 				} else if (evnt.key.code == sf::Keyboard::Space or evnt.key.code == sf::Keyboard::W) {
 					//rotate
-					rotation += 90;
-					if (rotation == 360) {
-						rotation = 0;
-					}
 					rotate();
 				}
 			}
 		}
-		/*
+
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000 or changeY) {
@@ -157,7 +145,7 @@ int main() {
 			clock.restart();
 			changeY = false;
 		}
-		*/
+
 		sf::Vector2f position1 = sprites[sprites.size() - 1].getPosition();
 		sf::Vector2f position2 = sprites[sprites.size() - 2].getPosition();
 		sf::Vector2f position3 = sprites[sprites.size() - 3].getPosition();
