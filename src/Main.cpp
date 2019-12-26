@@ -40,9 +40,38 @@ std::vector<int> shapes_sprites;
 //initialize tile texture
 sf::Texture tile;
 
+<<<<<<< HEAD
 void createTiles(){
 void createTiles() ;
 	int shapenum = rand() % 7;
+=======
+void rotate() {
+	sf::Vector2f center = sprites[sprites.size() - 2].getPosition();
+	sf::Vector2f currentPos, otherTilePos;
+	bool canRotate = true;
+	int newX[4], newY[4];
+	for (int i = 1; i < 5; i++) {
+		currentPos = sprites[sprites.size() - i].getPosition();
+		newX[i - 1] = center.x - (currentPos.y - center.y);
+		newY[i - 1] = center.y + (currentPos.x - center.x);
+		for (int i = 0; i < int(sprites.size() - 5); i++) {
+			otherTilePos = sprites[i].getPosition();
+			if (otherTilePos.x == currentPos.x and otherTilePos.y == currentPos.y) {
+				canRotate = false;
+				break;
+			}
+		}
+	}
+	if (canRotate) {
+		for (int i = 1; i < 5; i++) {
+			sprites[sprites.size() - i].setPosition(newX[i - 1], newY[i - 1]);
+		}
+	}
+}
+
+void createTiles() {
+	int shapenum = (rand() % 7);
+>>>>>>> 46a5b9a7c8ff43855c5311200951e4b9e10389ac
 	shapes_sprites.push_back(shapenum);
 	for (int i = 0; i < 8; i++) {
 		if (shapes[shapenum][i]) {
@@ -66,6 +95,13 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(320, 640), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
+	//set window icon
+	sf::Image icon;
+	if (!icon.loadFromFile("content/icon.png")) {
+		std::cerr << "Can't load content/icon.png" << std::endl;
+	}
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
 	int changeX = 0;
 	bool changeY = false;
 
@@ -83,29 +119,28 @@ int main() {
 	while (window.isOpen()) {
 
 		//event handling
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
+		sf::Event evnt;
+		while (window.pollEvent(evnt)) {
+			if (evnt.type == sf::Event::Closed) {
 				window.close();
 			}
 			//key pressed event
-			else if (event.type == sf::Event::KeyPressed) {
-				if (event.key.code == sf::Keyboard::Escape) {
+			else if (evnt.type == sf::Event::KeyPressed) {
+				if (evnt.key.code == sf::Keyboard::Escape) {
 					window.close();
-				} else if (event.key.code == sf::Keyboard::A) {
+				} else if (evnt.key.code == sf::Keyboard::A) {
 					changeX = -32;
-				} else if (event.key.code == sf::Keyboard::S) {
+				} else if (evnt.key.code == sf::Keyboard::S) {
 					changeY = true;
-				} else if (event.key.code == sf::Keyboard::D) {
+				} else if (evnt.key.code == sf::Keyboard::D) {
 					changeX = 32;
-				} else if (event.key.code == sf::Keyboard::Space or event.key.code == sf::Keyboard::W) {
+				} else if (evnt.key.code == sf::Keyboard::Space or evnt.key.code == sf::Keyboard::W) {
 					//rotate
-					switch (shapes_sprites[shapes_sprites.size() - 1]) {
-
-					}
+					rotate();
 				}
 			}
 		}
+
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000 or changeY) {
@@ -169,6 +204,37 @@ int main() {
 			sprites[sprites.size() - i].move(changeX, 0);
 		}
 		changeX = 0;
+
+		//destroy completed line
+		std::vector<int> spritesInRow;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < int(sprites.size()); j++) {
+				if (sprites[j].getPosition().y == 32 * i) {
+					spritesInRow.push_back(j);
+				}
+			}
+			if (spritesInRow.size() == 10) {
+				for (int a = 0; a < 10; a++) {
+					sprites[int(spritesInRow[a])].setOrigin(2, 2);
+				}
+				int spritesSize = int(sprites.size());
+				for (int b = 0; b < spritesSize; b++) {
+					if (sprites[b].getOrigin() == sf::Vector2f(2, 2)) {
+						sprites.erase(sprites.begin() + b);
+						spritesSize--;
+						b--;
+					}
+				}
+				for (int c = 0; c < spritesSize; c++) {
+					sprites[c].setOrigin(0, 0);
+					if (sprites[c].getPosition().y < 32 * i) {
+						sprites[c].move(0, 32);
+					}
+				}
+				createTiles();
+			}
+			spritesInRow.clear();
+		}
 
 		//window display
 		window.clear(sf::Color::Black);
