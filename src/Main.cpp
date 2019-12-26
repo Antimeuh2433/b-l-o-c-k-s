@@ -40,7 +40,8 @@ std::vector<int> shapes_sprites;
 //initialize tile texture
 sf::Texture tile;
 
-void createTiles() {
+void createTiles(){
+void createTiles() ;
 	int shapenum = rand() % 7;
 	shapes_sprites.push_back(shapenum);
 	for (int i = 0; i < 8; i++) {
