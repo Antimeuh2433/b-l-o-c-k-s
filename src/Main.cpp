@@ -40,11 +40,6 @@ std::vector<int> shapes_sprites;
 //initialize tile texture
 sf::Texture tile;
 
-<<<<<<< HEAD
-void createTiles(){
-void createTiles() ;
-	int shapenum = rand() % 7;
-=======
 void rotate() {
 	sf::Vector2f center = sprites[sprites.size() - 2].getPosition();
 	sf::Vector2f currentPos, otherTilePos;
@@ -71,7 +66,6 @@ void rotate() {
 
 void createTiles() {
 	int shapenum = (rand() % 7);
->>>>>>> 46a5b9a7c8ff43855c5311200951e4b9e10389ac
 	shapes_sprites.push_back(shapenum);
 	for (int i = 0; i < 8; i++) {
 		if (shapes[shapenum][i]) {
