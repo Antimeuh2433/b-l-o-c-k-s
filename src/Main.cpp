@@ -19,13 +19,13 @@
 #include "Main.hpp"
 
 bool shapes[7][8] = {
-	{true, true, true, false, false, true, false, false}, // T
-	{true, true, true, false, false, false, true, false}, // J
-	{true, true, true, false, true, false, false, false}, // L
-	{false, true, true, false, false, true, true, false}, // O
-	{true, true, false, false, false, true, true, false}, // Z
-	{false, true, true, false, true, true, false, false}, // S
-	{true, true, true, true, false, false, false, false} // I
+	{false, true, false, false, true, true, true, false}, // T -2
+	{false, false, true, false, true, true, true, false}, // J -2
+	{true, false, false, false, true, true, true, false}, // L -2
+	{false, true, true, false, false, true, true, false}, // O x
+	{true, true, false, false, false, true, true, false}, // Z -2
+	{false, true, true, false, true, true, false, false}, // S -1
+	{true, true, true, true, false, false, false, false} // I (-2 + -3)/2
 };
 
 //color vector
@@ -41,7 +41,17 @@ std::vector<int> shapes_sprites;
 sf::Texture tile;
 
 void rotate() {
-	sf::Vector2f center = sprites[sprites.size() - 2].getPosition();
+	sf::Vector2f center;
+	if (shapes_sprites[shapes_sprites.size() - 1] == 0 or shapes_sprites[shapes_sprites.size() - 1] == 1 or shapes_sprites[shapes_sprites.size() - 1] == 2 or shapes_sprites[shapes_sprites.size() - 1] == 4) {
+		// case T, J, L, Z
+		center = sprites[sprites.size() - 2].getPosition();
+	} else if (shapes_sprites[shapes_sprites.size() - 1] == 5) {
+		//case S
+		center = sprites[sprites.size() - 1].getPosition();
+	} else if (shapes_sprites[shapes_sprites.size() - 1] == 6) {
+		//case I
+
+	}
 	sf::Vector2f currentPos, otherTilePos;
 	bool canRotate = true;
 	int newX[4], newY[4];
