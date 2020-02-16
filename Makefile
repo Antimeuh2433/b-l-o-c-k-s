@@ -1,37 +1,28 @@
-# Defining variables
-OSFLAG:=
-CXX:=
-EXECUTABLECXX:=
 # Define os
 ifeq ($(OS),WINDOWS_NT)
-	OSFLAG+=Windows
+	OSFLAG=Windows
 else
 	UNAME_S:=$(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
-		OSFLAG+=Linux
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		OSFLAG+=OSX
+		OSFLAG=Linux
+	else ifeq ($(UNAME_S),Darwin)
+		OSFLAG=OSX
 	endif
 endif
 
 # Change variables depending on the os
 ifeq ($(OSFLAG),Windows)
-	.LIBPATTERNS:=lib%.dll
-	CXX:=g++
-	EXECUTABLECXX:=g++
-endif
-
-ifeq ($(OSFLAG),Linux)
-	.LIBPATTERNS:=lib%.so
-	CXX:=clang
-	EXECUTABLECXX:=clang++
-endif
-
-ifeq ($(OSFLAG),OSX)
-	.LIBPATTERNS:=lib%.dylib
-	CXX:=clang
-	EXECUTABLECXX:=clang++
+	.LIBPATTERNS=lib%.dll
+	CXX=g++
+	EXECUTABLECXX=g++
+else ifeq ($(OSFLAG),Linux)
+	.LIBPATTERNS=lib%.so
+	CXX=clang
+	EXECUTABLECXX=clang++
+else ifeq ($(OSFLAG),OSX)
+	.LIBPATTERNS=lib%.dylib
+	CXX=clang
+	EXECUTABLECXX=clang++
 endif
 
 
