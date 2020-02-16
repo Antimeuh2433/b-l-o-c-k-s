@@ -33,7 +33,7 @@ main.o : src/Main.cpp include/SFML/Graphics.hpp include/SFML/Window.hpp include/
 	$(CXX) -Wall -c -I./include/ -o main.o src/main.cpp
 
 graphics.o : include/SFML/Graphics.hpp
-	$(CXX) -Wall -c -o graphics.o include/SFML/Graphics.hpp
+	$(CXX) -Wall -c -I./include/ -o graphics.o include/SFML/Graphics.hpp
 
 clean :
 	rm main *.o
