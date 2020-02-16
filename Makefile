@@ -1,45 +1,48 @@
 # Defining variables
-OSFLAG :=
-CXX :=
-
+OSFLAG:=
+CXX:=
+EXECUTABLECXX:=
 # Define os
 ifeq ($(OS),WINDOWS_NT)
-	OSFLAG += Windows
+	OSFLAG+=Windows
 else
-	UNAME_S := $(shell uname -s)
+	UNAME_S:=$(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
-		OSFLAG += Unix
+		OSFLAG+=Linux
 	endif
 	ifeq ($(UNAME_S),Darwin)
-		OSFLAG += Unix
+		OSFLAG+=OSX
 	endif
+endif
 
 # Change variables depending on the os
 ifeq ($(OSFLAG),Windows)
-	.LIBPATTERNS = lib%.dll
-	CXX = g++
+	.LIBPATTERNS:=lib%.dll
+	CXX:=g++
+	EXECUTABLECXX:=g++
 endif
 
-ifeq ($(OSFLAG),Unix)
-	.LIBPATTERNS = lib%.so
-	CXX = clang
+ifeq ($(OSFLAG),Linux)
+	.LIBPATTERNS:=lib%.so
+	CXX:=clang
+	EXECUTABLECXX:=clang++
+endif
 
-# Search paths
-vpath %.cpp src
-vpath %.hpp include/SFML
+ifeq ($(OSFLAG),OSX)
+	.LIBPATTERNS:=lib%.dylib
+	CXX:=clang
+	EXECUTABLECXX:=clang++
+endif
 
-
-all:
-	@echo $(OSFLAG)
 
 main : main.o graphics.o
-	$(CXX) -Wall -L/lib/$(OSFLAG) -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+	$(EXECUTABLECXX) -Wall -L./lib/OSX -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 
-main.o : main.cpp Graphics.hpp Window.hpp System.hpp Config.hpp
+main.o : src/Main.cpp include/SFML/Graphics.hpp include/SFML/Window.hpp include/SFML/System.hpp include/SFML/Config.hpp
 	$(CXX) -Wall -c -I./include/ -o main.o src/main.cpp
 
-graphics.o : Graphics.hpp
-	$(CXX) -Wall -c -o graphics.o Graphics.hpp
+graphics.o : include/SFML/Graphics.hpp
+	$(CXX) -Wall -c -o graphics.o include/SFML/Graphics.hpp
 
 clean :
 	rm main *.o
