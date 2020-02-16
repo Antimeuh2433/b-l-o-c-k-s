@@ -18,7 +18,7 @@ ifeq ($(OSFLAG),Windows)
 else ifeq ($(OSFLAG),Linux)
 	.LIBPATTERNS=lib%.so
 	CXX=clang
-	EXECUTABLECXX=clang++
+	EXECUTABLECXX=clang
 else ifeq ($(OSFLAG),OSX)
 	.LIBPATTERNS=lib%.dylib
 	CXX=clang
@@ -27,7 +27,7 @@ endif
 
 
 main : main.o graphics.o
-	$(EXECUTABLECXX) -Wall -L./lib/OSX -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+	$(EXECUTABLECXX) -Wall -L./lib/$(OSFLAG) -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 
 main.o : src/Main.cpp include/SFML/Graphics.hpp include/SFML/Window.hpp include/SFML/System.hpp include/SFML/Config.hpp
 	$(CXX) -Wall -c -I./include/ -o main.o src/main.cpp
