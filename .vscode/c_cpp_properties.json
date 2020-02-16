@@ -34,8 +34,8 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/lib",
                 "${workspaceFolder}/test",
-                "/usr/local/include/**"
-            ],
+                "/usr/local/include/**",
+                "/usr/local/include/SFML"            ],
             "defines": [
                 "_DEBUG"
             ],
@@ -48,12 +48,12 @@
         {
             "name": "Win32",
             "intelliSenseMode": "gcc-x64",
-            "compilerPath": "C:/mingw32/bin/gcc.exe",
+            "compilerPath": "C:\\mingw64\\bin\\g++.exe",
             "includePath": [
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/lib",
                 "${workspaceFolder}/test",
-                "C:/SFML-2.5.1/include"
+                "C:\\SFML-2.5.1\\include\\SFML"
             ],
             "defines": [
                 "_DEBUG",
