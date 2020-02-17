@@ -7,7 +7,7 @@ set /p installDIR="Enter Install Path [.\bin\] : "
 
 IF NOT DEFINED installDIR (SET installDIR=.\bin)
 
-echo %installDIR%
+echo Installing to %installDIR%
 
 echo Compiling, please wait...
 g++ -Wall -c -I./include/ -o main.o src/main.cpp 
