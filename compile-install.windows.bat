@@ -17,6 +17,7 @@ echo Cleaning up...
 del .\*.o
 echo Compiling Process Completed, moving Install into installation directory at %installDIR%
 copy .\lib\Windows\*.dll %installDIR%\*.dll
+xcopy /E /I .\content .\bin\content
 move .\main.exe %installDIR%\main.exe
 ren %installDIR%\*.exe b-l-o-c-k-s.exe
 echo All Done! :D
