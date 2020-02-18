@@ -11,7 +11,8 @@ Everything is very much work in progress to say the least.
 ### Mac and Linux
 Coming soon!
 ### Windows
-1. Install MinGW64 (SEH) from https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/seh/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z/download (link from SFML official website)
+1. Install MinGW (SEH) from https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/seh/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z/download
+IMPORTANT! The version and the architecture is VERY important. It must be MinGW v.7.3.0 (SEH) 64-bit.
 
 2. IMPORTANT! Add g++ to your PATH by adding C:\mingw64\bin (or wherever you extracted mingw) in the PATH environmental variable.
 
