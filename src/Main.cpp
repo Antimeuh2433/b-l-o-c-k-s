@@ -1,5 +1,5 @@
 // B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
-// Copyright (C) 2019  Justin BAX
+// Copyright (C) 2020  Justin BAX
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
