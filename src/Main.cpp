@@ -95,6 +95,8 @@ void createTiles() {
 
 
 int main() {
+	std::cout << "b-l-0-c-k-s Copyright (C) 2020 Justin Bax\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under certain conditions.\nSee LICENSE for more details\n";
+	std::cout << "If you see this text, do not close this window while the game is running.";
 	srand(time(NULL));
 	//create and render window
 	sf::ContextSettings settings;
