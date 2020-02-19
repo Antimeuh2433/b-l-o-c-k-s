@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
-## Copyright (C) 2020  Justin BAX
+## Copyright (C) 2020  Justin BAX and Chris YANG
 ##
 ##    This program is free software: you can redistribute it and/or modify
 ##    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ fi
 echo "Compiling, please wait..."
 clang++ -Wall -c -Iinclude/ -o main.o src/main.cpp 
 clang++ -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
-clang++ -Wall -L/lib/ -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+clang++ -Wall -L./lib/Linux -L/lib -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 echo "Cleaning up..."
 sudo rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"

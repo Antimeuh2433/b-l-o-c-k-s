@@ -1,5 +1,5 @@
 // B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
-// Copyright (C) 2020  Justin BAX
+// Copyright (C) 2020  Justin BAX and Chris YANG
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -95,8 +95,8 @@ void createTiles() {
 
 
 int main() {
-	std::cout << "b-l-0-c-k-s Copyright (C) 2020 Justin Bax\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under certain conditions.\nSee LICENSE for more details\n";
-	std::cout << "If you see this text, do not close this window while the game is running.";
+	std::cout << "b-l-0-c-k-s Copyright (C) 2020 Justin BAX and Chris YANG\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under certain conditions.\nSee LICENSE for more details\n";
+	std::cout << "If you see this text, do not close this window while the game is running.\n";
 	srand(time(NULL));
 	//create and render window
 	sf::ContextSettings settings;

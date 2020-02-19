@@ -1,7 +1,7 @@
 @echo off
 
 REM B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
-REM Copyright (C) 2020  Justin BAX
+REM Copyright (C) 2020  Justin BAX and Chris YANG
 REM
 REM    This program is free software: you can redistribute it and/or modify
 REM    it under the terms of the GNU General Public License as published by
