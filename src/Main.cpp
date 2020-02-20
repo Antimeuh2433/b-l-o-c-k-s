@@ -1,5 +1,5 @@
 // B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
-// Copyright (C) 2019  Justin BAX
+// Copyright (C) 2020  Justin BAX and Chris YANG
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -15,83 +15,88 @@
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <vector>
-#include "Main.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 
-bool shapes[7][8] = {
-	{false, true, false, false, true, true, true, false}, // T -2
-	{false, false, true, false, true, true, true, false}, // J -2
-	{true, false, false, false, true, true, true, false}, // L -2
-	{false, true, true, false, false, true, true, false}, // O x
-	{true, true, false, false, false, true, true, false}, // Z -2
-	{false, true, true, false, true, true, false, false}, // S -1
-	{true, true, true, true, false, false, false, false} // I (-2 + -3)/2
-};
+bool shapes[7][8] = {	
+	{false, true, false, false, true, true, true, false}, // T -2	
+	{false, false, true, false, true, true, true, false}, // J -2	
+	{true, false, false, false, true, true, true, false}, // L -2	
+	{false, true, true, false, false, true, true, false}, // O x	
+	{true, true, false, false, false, true, true, false}, // Z -2	
+	{false, true, true, false, true, true, false, false}, // S -1	
+	{true, true, true, true, false, false, false, false} // I (-2 + -3)/2	
+};	
 
-//color vector
-std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color::Blue, sf::Color(255,165,0), sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};
+//color vector	
+std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color::Blue, sf::Color(255,165,0), sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};	
 
-//sprite vector
-std::vector<sf::Sprite> sprites;
+//sprite vector	
+std::vector<sf::Sprite> sprites;	
 
-//shape vector
-std::vector<int> shapes_sprites;
+//shape vector	
+std::vector<int> shapes_sprites;	
 
-//initialize tile texture
-sf::Texture tile;
+//initialize tile texture	
+sf::Texture tile;	
 
-void rotate() {
-	sf::Vector2f center;
-	if (shapes_sprites[shapes_sprites.size() - 1] == 0 or shapes_sprites[shapes_sprites.size() - 1] == 1 or shapes_sprites[shapes_sprites.size() - 1] == 2 or shapes_sprites[shapes_sprites.size() - 1] == 4) {
-		// case T, J, L, Z
-		center = sprites[sprites.size() - 2].getPosition();
-	} else if (shapes_sprites[shapes_sprites.size() - 1] == 5) {
-		//case S
-		center = sprites[sprites.size() - 1].getPosition();
-	} else if (shapes_sprites[shapes_sprites.size() - 1] == 6) {
-		//case I
+void rotate() {	
+	sf::Vector2f center;	
+	if (shapes_sprites[shapes_sprites.size() - 1] == 0 or shapes_sprites[shapes_sprites.size() - 1] == 1 or shapes_sprites[shapes_sprites.size() - 1] == 2 or shapes_sprites[shapes_sprites.size() - 1] == 4) {	
+		// case T, J, L, Z	
+		center = sprites[sprites.size() - 2].getPosition();	
+	} else if (shapes_sprites[shapes_sprites.size() - 1] == 5) {	
+		//case S	
+		center = sprites[sprites.size() - 1].getPosition();	
+	} else if (shapes_sprites[shapes_sprites.size() - 1] == 6) {	
+		//case I	
 
-	}
-	sf::Vector2f currentPos, otherTilePos;
-	bool canRotate = true;
-	int newX[4], newY[4];
-	for (int i = 1; i < 5; i++) {
-		currentPos = sprites[sprites.size() - i].getPosition();
-		newX[i - 1] = center.x - (currentPos.y - center.y);
-		newY[i - 1] = center.y + (currentPos.x - center.x);
-		for (int i = 0; i < int(sprites.size() - 5); i++) {
-			otherTilePos = sprites[i].getPosition();
-			if (otherTilePos.x == currentPos.x and otherTilePos.y == currentPos.y) {
-				canRotate = false;
-				break;
-			}
-		}
-	}
-	if (canRotate) {
-		for (int i = 1; i < 5; i++) {
-			sprites[sprites.size() - i].setPosition(newX[i - 1], newY[i - 1]);
-		}
-	}
-}
+	}	
+	sf::Vector2f currentPos, otherTilePos;	
+	bool canRotate = true;	
+	int newX[4], newY[4];	
+	for (int i = 1; i < 5; i++) {	
+		currentPos = sprites[sprites.size() - i].getPosition();	
+		newX[i - 1] = center.x - (currentPos.y - center.y);	
+		newY[i - 1] = center.y + (currentPos.x - center.x);	
+		for (int i = 0; i < int(sprites.size() - 5); i++) {	
+			otherTilePos = sprites[i].getPosition();	
+			if (otherTilePos.x == currentPos.x and otherTilePos.y == currentPos.y) {	
+				canRotate = false;	
+				break;	
+			}	
+		}	
+	}	
+	if (canRotate) {	
+		for (int i = 1; i < 5; i++) {	
+			sprites[sprites.size() - i].setPosition(newX[i - 1], newY[i - 1]);	
+		}	
+	}	
+}	
 
-void createTiles() {
-	int shapenum = (rand() % 7);
-	shapes_sprites.push_back(shapenum);
-	for (int i = 0; i < 8; i++) {
-		if (shapes[shapenum][i]) {
-			sprites.push_back(sf::Sprite(tile));
-			sprites[sprites.size() - 1].setScale(2.f, 2.f);
-			sprites[sprites.size() - 1].setColor(colors[shapenum]);
-			if (i < 4) {
-				sprites[sprites.size() - 1].setPosition(i * 32 + 96, 0);
-			} else {
-				sprites[sprites.size() - 1].setPosition((i - 4) * 32 + 96, 32);
-			}
-		}
-	}
-}
+void createTiles() {	
+	int shapenum = (rand() % 7);	
+	shapes_sprites.push_back(shapenum);	
+	for (int i = 0; i < 8; i++) {	
+		if (shapes[shapenum][i]) {	
+			sprites.push_back(sf::Sprite(tile));	
+			sprites[sprites.size() - 1].setScale(2.f, 2.f);	
+			sprites[sprites.size() - 1].setColor(colors[shapenum]);	
+			if (i < 4) {	
+				sprites[sprites.size() - 1].setPosition(i * 32 + 96, 0);	
+			} else {	
+				sprites[sprites.size() - 1].setPosition((i - 4) * 32 + 96, 32);	
+			}	
+		}	
+	}	
+}	
+
 
 int main() {
+	std::cout << "b-l-0-c-k-s Copyright (C) 2020 Justin BAX and Chris YANG\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under certain conditions.\nSee LICENSE for more details\n";
+	std::cout << "If you see this text, do not close this window while the game is running.\n";
 	srand(time(NULL));
 	//create and render window
 	sf::ContextSettings settings;
