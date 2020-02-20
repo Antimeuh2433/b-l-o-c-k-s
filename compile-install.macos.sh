@@ -17,26 +17,11 @@
 ##    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 echo "Make sure to run the script in the downloaded repo directory and as a standard user"
-echo "Skipping system dependency pull"
-echo "The required libraries are in ./lib/Linux, to run the program, specify the directory in the LD_LIBRARY_PATH variable"
-echo "i.e.  $ LD_LIBRARY_PATH=./lib/linux ./b-l-o-c-k-s"
-echo "Clang is required to compile this program, please make sure it's installed"
-echo 
+echo "The required libraries are in ./lib/OSX, to run the program, specify the directory in the LD_LIBRARY_PATH variable"
+echo "i.e.  $ LD_LIBRARY_PATH=./lib/OSX ./b-l-o-c-k-s"
+echo "Clang/LLVM is required to compile this program, please make sure it's installed"
+echo
 
-##
-# if [[ $(cat /etc/*-release | grep "ID_LIKE") = *debian* ]]; then
-#   sudo apt-get update && sudo apt-get install -y libsfml-dev clang
-# elif [[ $(cat /etc/*-release | grep "ID") = *arch* ]]; then
-#    sudo pacman -Syy sfml clang sudo --needed --noconfirm
-# elif [[ $(cat /etc/*-release | grep "ID") = *fedora* ]]; then
-#    sudo dnf check-update && sudo dnf install -y compat-SFML16 clang
-# else
-#    echo "Unable to automatically resolve dependencies due to incompatible distribution"
-#    echo "Please make sure to resolve dependencies manually if not already done"
-#    echo "SFML Libraries are in the ./lib/Linux folder"
-#    echo "The build will continue"
-# fi
-##
 
 read -p 'Binary Install Directory [./bin]: ' INSTALLDIR
 if [[ -z $INSTALLDIR ]]; then
@@ -46,12 +31,12 @@ fi
 echo "Compiling, please wait..."
 clang++ -Wall -c -Iinclude/ -o main.o src/main.cpp 
 clang++ -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
-clang++ -Wall -L./lib/Linux -L/lib -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+clang++ -Wall -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 echo "Cleaning up..."
 sudo rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"
 sudo mv ./main $INSTALLDIR/b-l-o-c-k-s
 echo "Updating permissions"
-sudo chown root:root $INSTALLDIR/b-l-o-c-k-s
+sudo chown root:admin $INSTALLDIR/b-l-o-c-k-s
 sudo chmod 755 $INSTALLDIR/b-l-o-c-k-s
 echo "All Done :D"
