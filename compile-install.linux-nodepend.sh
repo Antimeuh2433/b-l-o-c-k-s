@@ -21,6 +21,7 @@ echo "Skipping system dependency pull"
 echo "The required libraries are in ./lib/Linux, to run the program, specify the directory in the LD_LIBRARY_PATH variable"
 echo "i.e.  $ LD_LIBRARY_PATH=./lib/linux ./b-l-o-c-k-s"
 echo "Clang is required to compile this program, please make sure it's installed"
+echo 
 
 ##
 # if [[ $(cat /etc/*-release | grep "ID_LIKE") = *debian* ]]; then
