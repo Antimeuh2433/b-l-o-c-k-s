@@ -31,7 +31,7 @@ fi
 echo "Compiling, please wait..."
 clang++ -Wall -c -Iinclude/ -o main.o src/main.cpp 
 clang++ -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
-clang++ -Wall -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+clang++ -Wall -L/usr/lib -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 echo "Cleaning up..."
 sudo rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"
