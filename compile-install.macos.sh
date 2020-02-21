@@ -29,9 +29,9 @@ if [[ -z $INSTALLDIR ]]; then
 fi
 
 echo "Compiling, please wait..."
-clang++ -Wall -c -Iinclude/ -o main.o src/main.cpp 
-clang++ -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
-clang++ -Wall -L/usr/lib -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+clang++ -std=c++11 -Wall -c -Iinclude/ -o main.o src/main.cpp 
+clang++ -std=c++11 -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
+clang++ -std=c++11 -Wall -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 echo "Cleaning up..."
 sudo rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"
@@ -40,3 +40,4 @@ echo "Updating permissions"
 sudo chown root:admin $INSTALLDIR/b-l-o-c-k-s
 sudo chmod 755 $INSTALLDIR/b-l-o-c-k-s
 echo "All Done :D"
+
