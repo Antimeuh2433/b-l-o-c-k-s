@@ -42,7 +42,7 @@ read -p 'Binary Install Directory [./bin]: ' INSTALLDIR
 if [[ -z $INSTALLDIR ]]; then
     INSTALLDIR="./bin"
 fi
-
+mkdir $INSTALLDIR
 echo "Compiling, please wait..."
 clang++ -Wall -c -Iinclude/ -o main.o src/main.cpp 
 clang++ -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
