@@ -24,7 +24,7 @@ echo.
 set /p installDIR="Enter Install Path [.\bin\] : "
 
 IF NOT DEFINED installDIR (SET installDIR=.\bin)
-
+mkdir %installDIR%
 echo Installing to %installDIR%
 
 echo Compiling, please wait...
