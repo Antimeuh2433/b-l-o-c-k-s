@@ -22,8 +22,8 @@
 
 bool shapes[7][8] = {	
 	{false, true, false, false, true, true, true, false}, // T -2	
-	{false, false, true, false, true, true, true, false}, // J -2	
-	{true, false, false, false, true, true, true, false}, // L -2	
+	{false, false, true, false, true, true, true, false}, // L -2	
+	{true, false, false, false, true, true, true, false}, // J -2	
 	{false, true, true, false, false, true, true, false}, // O x	
 	{true, true, false, false, false, true, true, false}, // Z -2	
 	{false, true, true, false, true, true, false, false}, // S -1	
@@ -31,7 +31,7 @@ bool shapes[7][8] = {
 };	
 
 //color vector	
-std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color::Blue, sf::Color(255,165,0), sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};	
+std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color(255,165,0), sf::Color::Blue,sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};	
 
 //sprite vector	
 std::vector<sf::Sprite> sprites;	
@@ -43,9 +43,13 @@ std::vector<int> shapes_sprites;
 sf::Texture tile;	
 
 void rotate() {	
+	if (shapes_sprites[shapes_sprites.size() - 1] == 3) {
+		//case O
+		return;
+	}
 	sf::Vector2f center;	
 	if (shapes_sprites[shapes_sprites.size() - 1] == 0 or shapes_sprites[shapes_sprites.size() - 1] == 1 or shapes_sprites[shapes_sprites.size() - 1] == 2 or shapes_sprites[shapes_sprites.size() - 1] == 4) {	
-		// case T, J, L, Z	
+		//case T, J, L, Z	
 		center = sprites[sprites.size() - 2].getPosition();	
 	} else if (shapes_sprites[shapes_sprites.size() - 1] == 5) {	
 		//case S	
