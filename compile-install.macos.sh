@@ -17,10 +17,8 @@
 ##    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 echo "Make sure to run the script in the downloaded repo directory and as a standard user"
-echo "The required libraries are in ./lib/OSX, to run the program, specify the directory in the LD_LIBRARY_PATH variable"
-echo "i.e.  $ LD_LIBRARY_PATH=./lib/OSX ./b-l-o-c-k-s"
 echo "Clang/LLVM is required to compile this program, please make sure it's installed"
-echo
+echo "Be aware that this script might ask for your password to run sudo commands while cleaning up."
 
 
 read -p 'Binary Install Directory [./bin]: ' INSTALLDIR
@@ -31,7 +29,7 @@ mkdir $INSTALLDIR
 echo "Compiling, please wait..."
 clang++ -std=c++11 -Wall -c -Iinclude/ -o main.o src/main.cpp 
 clang++ -std=c++11 -Wall -c -Iinclude/ -o graphics.o include/SFML/Graphics.hpp
-clang++ -std=c++11 -Wall -L/usr/lib -L./lib/OSX -rpath ./lib/OSX/extlibs -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
+clang++ -std=c++11 -Wall -L/usr/local/lib -rpath ./lib/OSX/extlibs -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 echo "Cleaning up..."
 sudo rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"
@@ -40,4 +38,5 @@ echo "Updating permissions"
 sudo chown root:admin $INSTALLDIR/b-l-o-c-k-s
 sudo chmod 755 $INSTALLDIR/b-l-o-c-k-s
 echo "All Done :D"
+echo "To run the program, simply run ./bin/b-l-o-c-k-s"
 
