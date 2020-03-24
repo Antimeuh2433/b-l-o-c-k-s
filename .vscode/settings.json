@@ -1,6 +1,8 @@
 {
   "files.associations": {
-    "*.tpp": "cpp"
+    "*.py": "bat",
+    "*.tpp": "cpp",
+    "iostream": "cpp"
   },
   "terminal.integrated.shell.windows": "cmd.exe",
   "git.enableCommitSigning": true

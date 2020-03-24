@@ -42,6 +42,11 @@ std::vector<int> shapes_sprites;
 //initialize tile texture	
 sf::Texture tile;	
 
+//initialize sound buffers
+sf::SoundBuffer bumpBuffer;
+sf::SoundBuffer clickBuffer;
+sf::SoundBuffer blockBuffer;
+
 void rotate() {	
 	if (shapes_sprites[shapes_sprites.size() - 1] == 3) {
 		//case O
@@ -107,6 +112,25 @@ int main() {
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(320, 640), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
+
+	//load sounds
+	if (!clickBuffer.loadFromFile("content/click.ogg")) {
+		std::cerr << "Can't load content/click.ogg" << std::endl;
+	}
+	if (!bumpBuffer.loadFromFile("content/bump.ogg")) {
+		std::cerr << "Can't load content/bump.ogg" << std::endl;
+	}
+	if (!blockBuffer.loadFromFile("content/block.ogg")) {
+		std::cerr << "Can't load content/block.ogg" << std::endl;
+	}
+
+	//create sounds and set buffers
+	sf::Sound click;
+	click.setBuffer(clickBuffer);
+	sf::Sound bump;
+	bump.setBuffer(bumpBuffer);
+	sf::Sound block;
+	block.setBuffer(blockBuffer);
 
 	//set window icon
 	sf::Image icon;
@@ -176,6 +200,7 @@ int main() {
 
 			//if tile spawns directly in other tile
 			if ((position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x)) {
+				bump.play();
 				std::cout << "Game over!";
 				window.close();
 				return 0;
@@ -183,6 +208,7 @@ int main() {
 
 			//if current tile is on other tile
 			if ((position1.y == otherTilesPos.y and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.x == otherTilesPos.x)) {
+				bump.play();
 				for (int i = 1; i < 5; i++) {
 					sprites[sprites.size() - i].move(0, -32);
 				}
@@ -195,17 +221,20 @@ int main() {
 
 			//block movement on x axis if a tile is already there
 			if ((position1.x + changeX == otherTilesPos.x and position1.y == otherTilesPos.y) or (position2.x + changeX == otherTilesPos.x and position2.y == otherTilesPos.y) or (position3.x + changeX == otherTilesPos.x and position3.y == otherTilesPos.y) or (position4.x + changeX == otherTilesPos.x and position4.y == otherTilesPos.y)) {
+				block.play();
 				changeX = 0;
 			}
 		}
 
 		//block movement on x axis if on border
 		if ((position1.x == 0 and changeX < 0) or (position2.x == 0 and changeX < 0) or (position3.x == 0 and changeX < 0) or (position4.x == 0 and changeX < 0) or (position1.x == 288 and changeX > 0) or (position2.x == 288 and changeX > 0) or (position3.x == 288 and changeX > 0) or (position4.x == 288 and changeX > 0)) {
+			block.play();
 			changeX = 0;
 		}
 
 		//if current tile touches bottom
 		if (position1.y >= 640 or position2.y >= 640 or position3.y >= 640 or position4.y >= 640) {
+			bump.play();
 			for (int i = 0; i < 5; i++) {
 				sprites[sprites.size() - i].move(0, -32);
 			}
