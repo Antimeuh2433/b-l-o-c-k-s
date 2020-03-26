@@ -180,7 +180,7 @@ int main() {
 
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
-		if (elapsed.asMilliseconds() >= 100000 or changeY) {	//debug value of 100000; insert 1000 for release
+		if (elapsed.asMilliseconds() >= 1000 or changeY) {
 			//moves downwards
 			for (int i = 1; i <= 4; i++) {
 				sprites[sprites.size() - i].move(0, 32);
@@ -288,27 +288,11 @@ int main() {
 			spritesInRow.clear();
 		}
 
-
-
-
-
-		//test
-		sf::RectangleShape Icenter;
-		if (shapes_sprites[shapes_sprites.size() - 1] == 6) {
-			//if I
-			sf::Vector2f center = sf::Vector2f(sprites[sprites.size() - 2].getPosition().x - 16, sprites[sprites.size() - 2].getPosition().y + 16);
-			Icenter.setSize(sf::Vector2f(1, 1));
-			Icenter.setPosition(center);
-		}
-
-		//end test
-
 		//window display
 		window.clear(sf::Color::Black);
 		for (int i = 0; i < int(sprites.size()); i++) {
 			window.draw(sprites[i]);
 		}
-		window.draw(Icenter);
 		window.display();
 	}
 	return 0;
