@@ -61,7 +61,7 @@ void rotate() {
 		center = sprites[sprites.size() - 1].getPosition();	
 	} else if (shapes_sprites[shapes_sprites.size() - 1] == 6) {	
 		//case I	
-
+		center = sf::Vector2f(sprites[sprites.size() - 2].getPosition().x - 16, sprites[sprites.size() - 2].getPosition().y + 16);
 	}	
 	sf::Vector2f currentPos, otherTilePos;	
 	bool canRotate = true;	
@@ -180,7 +180,7 @@ int main() {
 
 		//after 1 sec
 		sf::Time elapsed = clock.getElapsedTime();
-		if (elapsed.asMilliseconds() >= 1000 or changeY) {
+		if (elapsed.asMilliseconds() >= 100000 or changeY) {	//debug value of 100000; insert 1000 for release
 			//moves downwards
 			for (int i = 1; i <= 4; i++) {
 				sprites[sprites.size() - i].move(0, 32);
@@ -200,15 +200,19 @@ int main() {
 
 			//if tile spawns directly in other tile
 			if ((position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x)) {
-				bump.play();
-				std::cout << "Game over!";
+				if (!bump.getStatus()) {
+					bump.play();
+				}
+				std::cout << "Game over!" << std::endl;
 				window.close();
 				return 0;
 			}
 
 			//if current tile is on other tile
 			if ((position1.y == otherTilesPos.y and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.x == otherTilesPos.x)) {
-				bump.play();
+				if (!bump.getStatus()) {
+					bump.play();
+				}
 				for (int i = 1; i < 5; i++) {
 					sprites[sprites.size() - i].move(0, -32);
 				}
@@ -221,20 +225,26 @@ int main() {
 
 			//block movement on x axis if a tile is already there
 			if ((position1.x + changeX == otherTilesPos.x and position1.y == otherTilesPos.y) or (position2.x + changeX == otherTilesPos.x and position2.y == otherTilesPos.y) or (position3.x + changeX == otherTilesPos.x and position3.y == otherTilesPos.y) or (position4.x + changeX == otherTilesPos.x and position4.y == otherTilesPos.y)) {
-				block.play();
+				if (!block.getStatus()) {
+					block.play();
+				}
 				changeX = 0;
 			}
 		}
 
 		//block movement on x axis if on border
 		if ((position1.x == 0 and changeX < 0) or (position2.x == 0 and changeX < 0) or (position3.x == 0 and changeX < 0) or (position4.x == 0 and changeX < 0) or (position1.x == 288 and changeX > 0) or (position2.x == 288 and changeX > 0) or (position3.x == 288 and changeX > 0) or (position4.x == 288 and changeX > 0)) {
-			block.play();
+			if (!block.getStatus()) {
+					block.play();
+				}
 			changeX = 0;
 		}
 
 		//if current tile touches bottom
 		if (position1.y >= 640 or position2.y >= 640 or position3.y >= 640 or position4.y >= 640) {
-			bump.play();
+			if (!bump.getStatus()) {
+					bump.play();
+				}
 			for (int i = 0; i < 5; i++) {
 				sprites[sprites.size() - i].move(0, -32);
 			}
@@ -278,11 +288,27 @@ int main() {
 			spritesInRow.clear();
 		}
 
+
+
+
+
+		//test
+		sf::RectangleShape Icenter;
+		if (shapes_sprites[shapes_sprites.size() - 1] == 6) {
+			//if I
+			sf::Vector2f center = sf::Vector2f(sprites[sprites.size() - 2].getPosition().x - 16, sprites[sprites.size() - 2].getPosition().y + 16);
+			Icenter.setSize(sf::Vector2f(1, 1));
+			Icenter.setPosition(center);
+		}
+
+		//end test
+
 		//window display
 		window.clear(sf::Color::Black);
 		for (int i = 0; i < int(sprites.size()); i++) {
 			window.draw(sprites[i]);
 		}
+		window.draw(Icenter);
 		window.display();
 	}
 	return 0;

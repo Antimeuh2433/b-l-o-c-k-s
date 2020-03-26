@@ -2,7 +2,8 @@
   "files.associations": {
     "*.py": "bat",
     "*.tpp": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "vector": "cpp"
   },
   "terminal.integrated.shell.windows": "cmd.exe",
   "git.enableCommitSigning": true
