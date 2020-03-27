@@ -21,13 +21,13 @@
 #include <SFML/Audio.hpp>
 
 bool shapes[7][8] = {	
-	{false, true, false, false, true, true, true, false}, // T -2	
-	{false, false, true, false, true, true, true, false}, // L -2	
-	{true, false, false, false, true, true, true, false}, // J -2	
-	{false, true, true, false, false, true, true, false}, // O x	
-	{true, true, false, false, false, true, true, false}, // Z -2	
-	{false, true, true, false, true, true, false, false}, // S -1	
-	{true, true, true, true, false, false, false, false} // I (-2 + -3)/2	
+	{false, true, false, false, true, true, true, false}, // T
+	{false, false, true, false, true, true, true, false}, // L
+	{true, false, false, false, true, true, true, false}, // J
+	{false, true, true, false, false, true, true, false}, // O
+	{true, true, false, false, false, true, true, false}, // Z
+	{false, true, true, false, true, true, false, false}, // S
+	{true, true, true, true, false, false, false, false} // I
 };	
 
 //color vector	
@@ -37,7 +37,7 @@ std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color(255,165,0), sf:
 std::vector<sf::Sprite> sprites;	
 
 //shape vector	
-std::vector<int> shapes_sprites;	
+std::vector<short int> shapes_sprites;	
 
 //initialize tile texture	
 sf::Texture tile;	
@@ -46,6 +46,9 @@ sf::Texture tile;
 sf::SoundBuffer bumpBuffer;
 sf::SoundBuffer clickBuffer;
 sf::SoundBuffer blockBuffer;
+
+//special state value for I rotation
+short int state;
 
 void rotate() {	
 	if (shapes_sprites[shapes_sprites.size() - 1] == 3) {
@@ -61,7 +64,21 @@ void rotate() {
 		center = sprites[sprites.size() - 1].getPosition();	
 	} else if (shapes_sprites[shapes_sprites.size() - 1] == 6) {	
 		//case I	
-		center = sf::Vector2f(sprites[sprites.size() - 2].getPosition().x - 16, sprites[sprites.size() - 2].getPosition().y + 16);
+		center = sf::Vector2f(sprites[sprites.size() - 2].getPosition().x - 16, sprites[sprites.size() - 2].getPosition().y - 16);
+		switch (state) {
+			case 0:
+				center.y += 32;
+				break;
+			case 1:
+				break;
+			case 2:
+				center.x += 32;
+				break;
+			case 3:
+				center.x += 32;
+				center.y += 32;
+				break;
+		}
 	}	
 	sf::Vector2f currentPos, otherTilePos;	
 	bool canRotate = true;	
@@ -79,6 +96,10 @@ void rotate() {
 		}	
 	}	
 	if (canRotate) {	
+		state++;
+		if (state == 4) {
+			state = 0;
+		}
 		for (int i = 1; i < 5; i++) {	
 			sprites[sprites.size() - i].setPosition(newX[i - 1], newY[i - 1]);	
 		}	
@@ -86,6 +107,7 @@ void rotate() {
 }	
 
 void createTiles() {	
+	state = 0;
 	int shapenum = (rand() % 7);	
 	shapes_sprites.push_back(shapenum);	
 	for (int i = 0; i < 8; i++) {	
