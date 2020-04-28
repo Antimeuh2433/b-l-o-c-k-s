@@ -8,10 +8,7 @@ B-L-0-C-K-S is a proof-of-concept / Educational Project inspired by tetris. It's
 Everything is very much work in progress to say the least.
 
 ## Compile
-<<<<<<< HEAD
-Well there isn't much to compile right now, but you can try building the SFML libraries and intergrating the Main.cpp file located in src. The SFML build environment used is sfml-vscode-boilerplate. Documentation for that can be found at https://github.com/andrew-r-king/sfml-vscode-boilerplate/blob/master/README.md.
-
-=======
+Compile scripts are in ./scripts/
 ### Mac and Linux
 Coming soon!
 ### Windows
@@ -21,7 +18,6 @@ IMPORTANT! The version and the architecture is VERY important. It must be MinGW 
 2. IMPORTANT! Add g++ to your PATH by adding C:\mingw64\bin (or wherever you extracted mingw) in the PATH environmental variable.
 
 3. Run compile-install.windows.bat
->>>>>>> 4d2787f7f9790b77aaf8a72ba973722bd64b8534
 ## Pull requests
 Just leave them :D
 
