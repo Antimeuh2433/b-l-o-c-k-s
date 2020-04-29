@@ -122,9 +122,10 @@ int main() {
 					changeY = true;
 				} else if (evnt.key.code == sf::Keyboard::D) {
 					changeX = 32;
-				} else if (evnt.key.code == sf::Keyboard::Space or evnt.key.code == sf::Keyboard::W) {
-					//rotate
-					pieceVec[0].rotate(&pieceVec);
+				} else if (evnt.key.code == sf::Keyboard::Space) {
+					pieceVec[0].rotateClockwise(&pieceVec);
+				} else if (evnt.key.code == sf::Keyboard::C) {
+					pieceVec[0].rotateCounterClockwise(&pieceVec);
 				}
 			}
 		}
@@ -133,7 +134,7 @@ int main() {
 		sf::Time elapsed = clock.getElapsedTime();
 		if (elapsed.asMilliseconds() >= 1000 or changeY) {
 			//moves downwards
-			for (int i = 1; i <= 4; i++) {
+			for (int i = 0; i < 4; i++) {
 				pieceVec[0].blocks[i].sprite.move(0, 32);
 			}
 			clock.restart();
@@ -144,13 +145,14 @@ int main() {
 		sf::Vector2f position2 = pieceVec[0].blocks[1].sprite.getPosition();
 		sf::Vector2f position3 = pieceVec[0].blocks[2].sprite.getPosition();
 		sf::Vector2f position4 = pieceVec[0].blocks[3].sprite.getPosition();
-		for (int i = 0; i < pieceVec.size() - 1; i++) {
+		for (int i = 1; i < pieceVec.size(); i++) {
 			for (int j = 0; j < 4; j++) {
-				if (pieceVec[i].blocks[j].exists) {
+				if (pieceVec[i].blocks[j].exists and i != 0) {
 					sf::Vector2f otherTilesPos = pieceVec[i].blocks[j].sprite.getPosition();
 
 					//if tile spawns directly on other tile
-					if ((position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x)) {
+					if (i != 0 and (position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x)) {
+						std::cout << i << std::endl;
 						if (!bump.getStatus()) {
 							bump.play();
 						}
@@ -164,14 +166,14 @@ int main() {
 						if (!bump.getStatus()) {
 							bump.play();
 						}
-						for (int i = 0; i < 4; i++) {
-							pieceVec[0].blocks[i].sprite.move(0, -32);
+						for (int k = 0; k < 4; k++) {
+							pieceVec[0].blocks[k].sprite.move(0, -32);
 						}
 						createTiles(&tile, &pieceVec);
-						position1 = pieceVec[0].blocks[1].sprite.getPosition();
-						position2 = pieceVec[1].blocks[1].sprite.getPosition();
-						position3 = pieceVec[3].blocks[1].sprite.getPosition();
-						position4 = pieceVec[4].blocks[1].sprite.getPosition();
+						position1 = pieceVec[0].blocks[0].sprite.getPosition();
+						position2 = pieceVec[0].blocks[1].sprite.getPosition();
+						position3 = pieceVec[0].blocks[2].sprite.getPosition();
+						position4 = pieceVec[0].blocks[3].sprite.getPosition();
 					}
 					
 					//block movement on x axis if a tile is already there
@@ -198,10 +200,8 @@ int main() {
 			if (!bump.getStatus()) {
 					bump.play();
 				}
-			for (int i = 0; i < 5; i++) {
-				for (int i = 0; i < 4; i++) {
-					pieceVec[0].blocks[i].sprite.move(0, -32);
-				}
+			for (int i = 0; i < 4; i++) {
+				pieceVec[0].blocks[i].sprite.move(0, -32);
 			}
 			createTiles(&tile, &pieceVec);
 		}
@@ -222,17 +222,17 @@ int main() {
 				}
 			}
 			if (spritesInRowNum.size() == 10) {
-				for (int i = 0; i < pieceVec.size(); i++) {
-					for (int j = 0; j < 4; j++) {
-						if (pieceVec[i].blocks[j].inRow and pieceVec[j].blocks[j].exists) {
-							pieceVec[i].blocks[j].die();
+				for (int j = 1; j < pieceVec.size(); j++) {
+					for (int k = 0; k < 4; k++) {
+						if (pieceVec[j].blocks[k].inRow and pieceVec[j].blocks[k].exists) {
+							pieceVec[j].blocks[k].die();
 						}
 					}
 				}
-				for (int i = 0; i < pieceVec.size(); i++) {
-					for (int j = 0; j < 4; j++) {
-						if (pieceVec[i].blocks[j].sprite.getPosition().y < 32 * i and pieceVec[i].blocks[j].exists) {
-							pieceVec[i].blocks[j].sprite.move(0, 32);
+				for (int j = 0; j < pieceVec.size(); j++) {
+					for (int k = 0; k < 4; k++) {
+						if (pieceVec[j].blocks[k].sprite.getPosition().y < 32 * i and pieceVec[j].blocks[k].exists) {
+							pieceVec[j].blocks[k].sprite.move(0, 32);
 						}
 					}
 				}

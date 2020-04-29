@@ -19,23 +19,23 @@ echo "Clang/LLVM is required to compile this program, please make sure it's inst
 echo "Be aware that this script might ask for your password to run sudo commands while cleaning up."
 
 
-read -p 'Binary Install Directory [../bin]: ' INSTALLDIR
+read -p 'Binary Install Directory [./bin]: ' INSTALLDIR
 if [[ -z $INSTALLDIR ]]; then
-    INSTALLDIR="../bin"
+    INSTALLDIR="./bin"
 fi
 mkdir $INSTALLDIR
 echo "Compiling, please wait..."
-clang++ -std=c++11 -Wall -c -I../include/ -o main.o ./src/main.cpp 
-clang++ -std=c++11 -Wall -c -I../include/ -o graphics.o ./include/SFML/Graphics.hpp
-clang++ -std=c++11 -Wall -c -I../include/ -o block.o ./src/block.cpp
+clang++ -std=c++11 -Wall -c -I./include/ -o main.o ./src/main.cpp 
+clang++ -std=c++11 -Wall -c -I./include/ -o graphics.o ./include/SFML/Graphics.hpp
+clang++ -std=c++11 -Wall -c -I./include/ -o block.o ./src/block.cpp
 clang++ -std=c++11 -Wall -L/usr/local/Cellar/sfml/2.5.1/lib -L./lib/OSX -rpath ./lib/OSX/extlibs -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o main main.o block.o
 echo "Cleaning up..."
 rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"
-mv ./main $INSTALLDIR/b-l-o-c-k-s
+mv ./main $INSTALLDIR
 echo "Updating permissions"
-chown root:admin $INSTALLDIR/b-l-o-c-k-s
-chmod 755 $INSTALLDIR/b-l-o-c-k-s
+chown root:admin $INSTALLDIR/main
+chmod 755 $INSTALLDIR/main
 echo "All Done :D"
 echo "To run the program, simply run ./bin/b-l-o-c-k-s"
 

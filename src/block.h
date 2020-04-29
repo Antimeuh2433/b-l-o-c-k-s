@@ -16,7 +16,8 @@ class Block {
 class Piece {
   public:
     Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile);
-    void rotate(std::vector<Piece>* pieceVec);
+    void rotateClockwise(std::vector<Piece>* pieceVec);
+    void rotateCounterClockwise(std::vector<Piece>* pieceVec);
     bool isInRow(int y, std::vector<int>* spritesInRowPos);
     bool isInRow(int y);
     Block blocks[4];

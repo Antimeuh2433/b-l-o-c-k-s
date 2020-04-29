@@ -51,7 +51,7 @@ Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile) : n
   }
 }
 
-void Piece::rotate(std::vector<Piece>* pieceVec) {
+void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
   if (this->num == 3) {
     //case O
     return;
@@ -86,13 +86,13 @@ void Piece::rotate(std::vector<Piece>* pieceVec) {
   sf::Vector2f currentPos, otherTilePos;
   for (int i = 0; i < 4; i++) {
     currentPos = this->blocks[i].sprite.getPosition();
-    newX[i] = center.x - (currentPos.y - center.y);
-    newY[i] = center.y + (currentPos.x - center.x);
+    newX[i] = center.x - currentPos.y + center.y;
+    newY[i] = center.y + currentPos.x - center.x;
     if (newX[i] < 0 or newX[i] > 320 or newY[i] < 0 or newY[i] > 640) {
       canRotate = false;
       break;
     }
-    for (int j = 0; j < (*pieceVec).size() - 1; j++) {
+    for (int j = 1; j < (*pieceVec).size(); j++) {
       for (int k = 0; k < 4; k++) {
         Piece &otherPiece = (*pieceVec)[j];
         otherTilePos = otherPiece.blocks[k].sprite.getPosition();
@@ -104,9 +104,72 @@ void Piece::rotate(std::vector<Piece>* pieceVec) {
     }
   }
   if (canRotate) {
-    state++;
-    if (state == 4) {
-      state = 0;
+    this->state--;
+    if (this->state == -1) {
+      this->state = 4;
+    }
+    for (int i = 0; i < 4; i++) {
+      this->blocks[i].sprite.setPosition(sf::Vector2f(newX[i], newY[i]));
+    }
+  }
+}
+
+void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
+  if (this->num == 3) {
+    //case O
+    return;
+  }
+  sf::Vector2f center;
+  if (this->num == 0 or this->num == 1 or this->num == 2 or this->num == 4) {
+    //case T, J, L, Z
+    center = this->blocks[2].sprite.getPosition();
+  } else if (this->num == 5) {
+    //case S
+    center = this->blocks[3].sprite.getPosition();
+  } else if (this->num == 6) {
+    //case I
+    center = sf::Vector2f(this->blocks[2].sprite.getPosition().x - 16, this->blocks[2].sprite.getPosition().y - 16);
+    switch (this->state) {
+      case 0:
+        center.y += 32;
+        break;
+      case 1:
+        break;
+      case 2:
+        center.x += 32;
+        break;
+      case 3:
+        center.x += 32;
+        center.y += 32;
+        break;
+    }
+  }
+  bool canRotate = true;
+  short int newX[4], newY[4];
+  sf::Vector2f currentPos, otherTilePos;
+  for (int i = 0; i < 4; i++) {
+    currentPos = this->blocks[i].sprite.getPosition();
+    newX[i] = center.x + currentPos.y - center.y;
+    newY[i] = center.y - currentPos.x + center.x;
+    if (newX[i] < 0 or newX[i] > 320 or newY[i] < 0 or newY[i] > 640) {
+      canRotate = false;
+      break;
+    }
+    for (int j = 1; j < (*pieceVec).size(); j++) {
+      for (int k = 0; k < 4; k++) {
+        Piece &otherPiece = (*pieceVec)[j];
+        otherTilePos = otherPiece.blocks[k].sprite.getPosition();
+        if (otherTilePos.x == newX[i] and otherTilePos.y == newY[i]) {
+          canRotate = false;
+          break;
+        }
+      }
+    }
+  }
+  if (canRotate) {
+    this->state--;
+    if (this->state == -1) {
+      this->state = 4;
     }
     for (int i = 0; i < 4; i++) {
       this->blocks[i].sprite.setPosition(sf::Vector2f(newX[i], newY[i]));
