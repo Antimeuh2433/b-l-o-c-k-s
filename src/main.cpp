@@ -27,108 +27,10 @@
 //Block object vertor
 std::vector<Piece> pieceVec;
 
-//color vector	
-//std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color(255,165,0), sf::Color::Blue,sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};	
-
-//sprite vector	
-//std::vector<sf::Sprite> sprites;	
-
-//shape vector	
-//std::vector<short int> shapes_sprites;	
-
 //initialize tile texture	
 sf::Texture tile;	
 
-//initialize sound buffers
-sf::SoundBuffer bumpBuffer;
-sf::SoundBuffer clickBuffer;
-sf::SoundBuffer blockBuffer;
-
-//special state value for I rotation
-short int state;
-
-void rotate() {
-	pieceVec[0].rotate(&pieceVec);
-
-	/*
-	if (shapes_sprites[shapes_sprites.size() - 1] == 3) {
-		//case O
-		return;
-	}
-	sf::Vector2f center;	
-	if (shapes_sprites[shapes_sprites.size() - 1] == 0 or shapes_sprites[shapes_sprites.size() - 1] == 1 or shapes_sprites[shapes_sprites.size() - 1] == 2 or shapes_sprites[shapes_sprites.size() - 1] == 4) {	
-		//case T, J, L, Z	
-		center = sprites[sprites.size() - 2].getPosition();	
-	} else if (shapes_sprites[shapes_sprites.size() - 1] == 5) {	
-		//case S	
-		center = sprites[sprites.size() - 1].getPosition();	
-	} else if (shapes_sprites[shapes_sprites.size() - 1] == 6) {	
-		//case I	
-		center = sf::Vector2f(sprites[sprites.size() - 2].getPosition().x - 16, sprites[sprites.size() - 2].getPosition().y - 16);
-		switch (state) {
-			case 0:
-				center.y += 32;
-				break;
-			case 1:
-				break;
-			case 2:
-				center.x += 32;
-				break;
-			case 3:
-				center.x += 32;
-				center.y += 32;
-				break;
-		}
-	}	
-	sf::Vector2f currentPos, otherTilePos;	
-	bool canRotate = true;	
-	int newX[4], newY[4];	
-	for (int i = 1; i < 5; i++) {	
-		currentPos = sprites[sprites.size() - i].getPosition();	
-		newX[i - 1] = center.x - (currentPos.y - center.y);	
-		newY[i - 1] = center.y + (currentPos.x - center.x);	
-		for (int i = 0; i < int(sprites.size() - 5); i++) {	
-			otherTilePos = sprites[i].getPosition();	
-			if (otherTilePos.x == newX[i - 1] and otherTilePos.y == newY[i - 1]) {	
-				canRotate = false;	
-				break;	
-			}	
-		}	
-		if (newX[i - 1] < 0 or newX[i - 1] > 320 or newY[i - 1] < 0 or newY[i - 1] > 640) {
-			canRotate = false;
-		}
-	}	
-	if (canRotate) {	
-		state++;
-		if (state == 4) {
-			state = 0;
-		}
-		for (int i = 1; i < 5; i++) {	
-			sprites[sprites.size() - i].setPosition(newX[i - 1], newY[i - 1]);	
-		}	
-	}	
-	*/
-}	
-
 void createTiles() {	
-	/*
-	state = 0;
-	int shapenum = (rand() % 7);	
-	shapes_sprites.push_back(shapenum);	
-	for (int i = 0; i < 8; i++) {	
-		if (shapes[shapenum][i]) {	
-			sprites.push_back(sf::Sprite(tile));	
-			sprites[sprites.size() - 1].setScale(2.f, 2.f);	
-			sprites[sprites.size() - 1].setColor(colors[shapenum]);	
-			if (i < 4) {	
-				sprites[sprites.size() - 1].setPosition(i * 32 + 96, 0);	
-			} else {	
-				sprites[sprites.size() - 1].setPosition((i - 4) * 32 + 96, 32);	
-			}	
-		}	
-	}	
-	*/
-
 	short int shapenum = rand() % 7;
 	Piece* ptr = new Piece(shapenum, &pieceVec, tile);
 	std::vector<Piece>::iterator it;
@@ -149,6 +51,10 @@ int main() {
 	window.setVerticalSyncEnabled(true);
 
 	//load sounds
+	sf::SoundBuffer bumpBuffer;
+	sf::SoundBuffer clickBuffer;
+	sf::SoundBuffer blockBuffer;
+	
 	try {
 		if (!clickBuffer.loadFromFile("content/click.ogg")) {
 			throw 101;
@@ -221,7 +127,7 @@ int main() {
 					changeX = 32;
 				} else if (evnt.key.code == sf::Keyboard::Space or evnt.key.code == sf::Keyboard::W) {
 					//rotate
-					rotate();
+					pieceVec[0].rotate(&pieceVec);
 				}
 			}
 		}
