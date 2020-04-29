@@ -1,18 +1,6 @@
 #include "block.h"
 #include <SFML/Graphics.hpp>
 
-std::vector<sf::Color> colors = {sf::Color(128,0,128), sf::Color(255,165,0), sf::Color::Blue,sf::Color::Yellow, sf::Color::Red, sf::Color::Green, sf::Color::Cyan};	
-
-bool shapes[7][8] = {	
-	{false, true, false, false, true, true, true, false}, // T
-	{false, false, true, false, true, true, true, false}, // L
-	{true, false, false, false, true, true, true, false}, // J
-	{false, true, true, false, false, true, true, false}, // O
-	{true, true, false, false, false, true, true, false}, // Z
-	{false, true, true, false, true, true, false, false}, // S
-	{true, true, true, true, false, false, false, false} // I
-};	
-
 Block::Block() {
   this->sprite.setScale(sf::Vector2f(2, 2));
   this->inRow = false;
@@ -26,8 +14,25 @@ void Block::die() {
   this->sprite.setScale(0, 0);
 }
 
-Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture tile) : num(num) { 
-  //constructor
+Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile) : num(num) { 
+  bool shapes[7][8] = {	
+	  {false, true, false, false, true, true, true, false}, // T
+	  {false, false, true, false, true, true, true, false}, // L
+	  {true, false, false, false, true, true, true, false}, // J
+	  {false, true, true, false, false, true, true, false}, // O
+	  {true, true, false, false, false, true, true, false}, // Z
+	  {false, true, true, false, true, true, false, false}, // S
+	  {true, true, true, true, false, false, false, false} // I
+  };	
+
+  std::vector<sf::Color> colors = {
+    sf::Color(128,0,128),
+    sf::Color(255,165,0),
+    sf::Color::Blue,sf::Color::Yellow,
+    sf::Color::Red, sf::Color::Green,
+    sf::Color::Cyan
+  };	
+
   this->state = 0;
   short int a = 0;
   for (int i = 0; i < 8; i++) {
@@ -36,10 +41,10 @@ Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture tile) : nu
       block.sprite.setColor(colors[num]);
       if (i < 4) {
         block.sprite.setPosition(i * 32 + 96, 0);
-        block.sprite.setTexture(tile);
+        block.sprite.setTexture(*tile);
       } else {
         block.sprite.setPosition((i - 4) * 32 + 96, 32);
-        block.sprite.setTexture(tile);
+        block.sprite.setTexture(*tile);
       }
       a++;
     }

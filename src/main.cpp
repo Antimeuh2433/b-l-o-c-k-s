@@ -24,18 +24,12 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-//Block object vertor
-std::vector<Piece> pieceVec;
-
-//initialize tile texture	
-sf::Texture tile;	
-
-void createTiles() {	
+void createTiles(sf::Texture* tile, std::vector<Piece>* pieceVec) {	
 	short int shapenum = rand() % 7;
-	Piece* ptr = new Piece(shapenum, &pieceVec, tile);
+	Piece* ptr = new Piece(shapenum, pieceVec, tile);
 	std::vector<Piece>::iterator it;
-	it = pieceVec.begin();
-	it = pieceVec.insert(it, *ptr);
+	it = (*pieceVec).begin();
+	it = (*pieceVec).insert(it, *ptr);
 	delete ptr;
 }	
 
@@ -54,7 +48,7 @@ int main() {
 	sf::SoundBuffer bumpBuffer;
 	sf::SoundBuffer clickBuffer;
 	sf::SoundBuffer blockBuffer;
-	
+
 	try {
 		if (!clickBuffer.loadFromFile("content/click.ogg")) {
 			throw 101;
@@ -78,6 +72,17 @@ int main() {
 	sf::Sound block;
 	block.setBuffer(blockBuffer);
 
+	//tile texture
+	sf::Texture tile;
+	try {
+		if (!tile.loadFromFile("content/tile.png")) {
+			throw 105;
+		}
+	} catch (int i) {
+		std::cerr << "Integer exception cought with value " << i << std::endl;
+		std::cerr << "Exceptions 10X : can't load file content/**" << std::endl;
+	}
+
 	//set window icon
 	sf::Image icon;
 	try {
@@ -95,18 +100,10 @@ int main() {
 
 	sf::Clock clock;
 
-	//define tile texture
-	try {
-		if (!tile.loadFromFile("content/tile.png")) {
-			throw 105;
-		}
-	} catch (int i) {
-		std::cerr << "Integer exception cought with value " << i << std::endl;
-		std::cerr << "Exceptions 10X : can't load file content/**" << std::endl;
-	}
+	std::vector<Piece> pieceVec;
 
 	//create first tiles
-	createTiles();
+	createTiles(&tile, &pieceVec);
 
 	while (window.isOpen()) {
 		//event handling
@@ -170,7 +167,7 @@ int main() {
 						for (int i = 0; i < 4; i++) {
 							pieceVec[0].blocks[i].sprite.move(0, -32);
 						}
-						createTiles();
+						createTiles(&tile, &pieceVec);
 						position1 = pieceVec[0].blocks[1].sprite.getPosition();
 						position2 = pieceVec[1].blocks[1].sprite.getPosition();
 						position3 = pieceVec[3].blocks[1].sprite.getPosition();
@@ -206,7 +203,7 @@ int main() {
 					pieceVec[0].blocks[i].sprite.move(0, -32);
 				}
 			}
-			createTiles();
+			createTiles(&tile, &pieceVec);
 		}
 
 		//move with keyboard entries
@@ -239,7 +236,7 @@ int main() {
 						}
 					}
 				}
-				createTiles();
+				createTiles(&tile, &pieceVec);
 			}
 			spritesInRowNum.clear();
 			spritesInRowPos.clear();
