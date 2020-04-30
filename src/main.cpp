@@ -108,9 +108,9 @@ int main() {
 	//load grid
 	sf::Sprite grid;
 	grid.setTexture(gridTexture);
-	grid.setScale(2, 2);
+	grid.setScale(4, 4);
 	grid.setPosition(sf::Vector2f(0, 0));
-	grid.setColor(sf::Color(255, 255, 255, 64));
+	grid.setColor(sf::Color(255, 255, 255, 32));
 
 	while (window.isOpen()) {
 		//event handling
@@ -221,7 +221,6 @@ int main() {
 		//destroy completed line
 		std::vector<int> spritesInRowNum;
 		std::vector<int> spritesInRowPos;
-		bool createNewPiece = false;
 		for (int i = 0; i < 20; i++) {
 			for (int j = 1; j < pieceVec.size(); j++) {
 				if (pieceVec[j].isInRow(i, &spritesInRowPos)) {
@@ -243,13 +242,9 @@ int main() {
 						}
 					}
 				}
-				createNewPiece = true;
 			}
 			spritesInRowNum.clear();
 			spritesInRowPos.clear();
-		}
-		if (createNewPiece) {
-			createTiles(&tile[rand() % 4], &pieceVec);
 		}
 		//window display
 		window.clear(sf::Color::Black);

@@ -6,8 +6,11 @@ gmon.out
 Thumbs.db
 .DS_Store
 ._*
-# VS Code
-.vscode/ipch
+# VS Code and Eclipse
+.vscode
+.settings
+.project
+.cproject
 
 # Project specific
 #
