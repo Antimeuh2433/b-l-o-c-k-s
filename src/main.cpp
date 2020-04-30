@@ -41,7 +41,7 @@ int main() {
 	//create and render window
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(320, 640), "BLOCKS!", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(640, 1280), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 	//load sounds
 	sf::SoundBuffer bumpBuffer;
@@ -108,6 +108,7 @@ int main() {
 	//load grid
 	sf::Sprite grid;
 	grid.setTexture(gridTexture);
+	grid.setScale(2, 2);
 	grid.setPosition(sf::Vector2f(0, 0));
 	grid.setColor(sf::Color(255, 255, 255, 64));
 
@@ -123,11 +124,11 @@ int main() {
 				if (evnt.key.code == sf::Keyboard::Escape) {
 					window.close();
 				} else if (evnt.key.code == sf::Keyboard::A) {
-					changeX = -32;
+					changeX = -64;
 				} else if (evnt.key.code == sf::Keyboard::S) {
 					changeY = true;
 				} else if (evnt.key.code == sf::Keyboard::D) {
-					changeX = 32;
+					changeX = 64;
 				} else if (evnt.key.code == sf::Keyboard::Space) {
 					pieceVec[0].rotateClockwise(&pieceVec);
 				} else if (evnt.key.code == sf::Keyboard::C) {
@@ -141,7 +142,7 @@ int main() {
 		if (elapsed.asMilliseconds() >= 1000 or changeY) {
 			//moves downwards
 			for (int i = 0; i < 4; i++) {
-				pieceVec[0].blocks[i].sprite.move(0, 32);
+				pieceVec[0].blocks[i].sprite.move(0, 64);
 			}
 			clock.restart();
 			changeY = false;
@@ -172,7 +173,7 @@ int main() {
 							bump.play();
 						}
 						for (int k = 0; k < 4; k++) {
-							pieceVec[0].blocks[k].sprite.move(0, -32);
+							pieceVec[0].blocks[k].sprite.move(0, -64);
 						}
 						createTiles(&tile[rand() % 4], &pieceVec);
 						position1 = pieceVec[0].blocks[0].sprite.getPosition();
@@ -193,7 +194,7 @@ int main() {
 		}
 
 		//block movement on x axis if on border
-		if ((position1.x == 0 and changeX < 0) or (position2.x == 0 and changeX < 0) or (position3.x == 0 and changeX < 0) or (position4.x == 0 and changeX < 0) or (position1.x == 288 and changeX > 0) or (position2.x == 288 and changeX > 0) or (position3.x == 288 and changeX > 0) or (position4.x == 288 and changeX > 0)) {
+		if ((position1.x == 0 and changeX < 0) or (position2.x == 0 and changeX < 0) or (position3.x == 0 and changeX < 0) or (position4.x == 0 and changeX < 0) or (position1.x == 576 and changeX > 0) or (position2.x == 576 and changeX > 0) or (position3.x == 576 and changeX > 0) or (position4.x == 576 and changeX > 0)) {
 			if (!block.getStatus()) {
 				block.play();
 			}
@@ -201,12 +202,12 @@ int main() {
 		}
 
 		//if current tile touches bottom
-		if (position1.y >= 640 or position2.y >= 640 or position3.y >= 640 or position4.y >= 640) {
+		if (position1.y >= 1280 or position2.y >= 1280 or position3.y >= 1280 or position4.y >= 1280) {
 			if (!bump.getStatus()) {
 					bump.play();
 				}
 			for (int i = 0; i < 4; i++) {
-				pieceVec[0].blocks[i].sprite.move(0, -32);
+				pieceVec[0].blocks[i].sprite.move(0, -64);
 			}
 			createTiles(&tile[rand() % 4], &pieceVec);
 		}
@@ -237,8 +238,8 @@ int main() {
 				}
 				for (int j = 0; j < pieceVec.size(); j++) {
 					for (int k = 0; k < 4; k++) {
-						if (pieceVec[j].blocks[k].sprite.getPosition().y < 32 * i and pieceVec[j].blocks[k].exists) {
-							pieceVec[j].blocks[k].sprite.move(0, 32);
+						if (pieceVec[j].blocks[k].sprite.getPosition().y < 64 * i and pieceVec[j].blocks[k].exists) {
+							pieceVec[j].blocks[k].sprite.move(0, 64);
 						}
 					}
 				}

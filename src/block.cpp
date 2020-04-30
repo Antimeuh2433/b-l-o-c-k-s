@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 Block::Block() {
-  this->sprite.setScale(sf::Vector2f(2, 2));
+  this->sprite.setScale(4, 4);
   this->inRow = false;
   this->exists = true;
 }
@@ -10,7 +10,7 @@ Block::Block() {
 void Block::die() {
   this->exists = false;
   this->inRow = false;
-  this->sprite.setPosition(1000, 1000);
+  this->sprite.setPosition(10000, 10000);
   this->sprite.setScale(0, 0);
 }
 
@@ -40,10 +40,10 @@ Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile) : n
       Block &block = this->blocks[a];
       block.sprite.setColor(colors[num]);
       if (i < 4) {
-        block.sprite.setPosition(i * 32 + 96, 0);
+        block.sprite.setPosition(i * 64 + 192, 0);
         block.sprite.setTexture(*tile);
       } else {
-        block.sprite.setPosition((i - 4) * 32 + 96, 32);
+        block.sprite.setPosition((i - 4) * 64 + 192, 64);
         block.sprite.setTexture(*tile);
       }
       a++;
