@@ -101,6 +101,7 @@ int main() {
 	sf::Sprite grid;
 	grid.setTexture(gridTexture);
 	grid.setPosition(sf::Vector2f(0, 0));
+	grid.setColor(sf::Color(255, 255, 255, 64));
 
 	while (window.isOpen()) {
 		//event handling
