@@ -43,7 +43,6 @@ int main() {
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(320, 640), "BLOCKS!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
-
 	//load sounds
 	sf::SoundBuffer bumpBuffer;
 	sf::SoundBuffer clickBuffer;
@@ -51,7 +50,7 @@ int main() {
 	//window icon
 	sf::Image icon;
 	//tile and grid textures
-	sf::Texture tile;
+	sf::Texture tile[4];
 	sf::Texture gridTexture;
 	try {
 		if (!clickBuffer.loadFromFile("content/click.ogg")) {
@@ -66,11 +65,20 @@ int main() {
 		if (!icon.loadFromFile("content/icon.png")) {
 			throw 104;
 		}
-		if (!tile.loadFromFile("content/tile.png")) {
+		if (!gridTexture.loadFromFile("content/grid.png")) {
 			throw 105;
 		}
-		if (!gridTexture.loadFromFile("content/grid.png")) {
+		if (!tile[0].loadFromFile("content/tiles/tile-01.png")) {
 			throw 106;
+		}
+		if (!tile[1].loadFromFile("content/tiles/tile-02.png")) {
+			throw 107;
+		}
+		if (!tile[2].loadFromFile("content/tiles/tile-03.png")) {
+			throw 108;
+		}
+		if (!tile[3].loadFromFile("content/tiles/tile-04.png")) {
+			throw 109;
 		}
 	} catch (int i) {
 		std::cerr << "Integer exception cought with value " << i << std::endl;
@@ -95,7 +103,7 @@ int main() {
 	std::vector<Piece> pieceVec;
 
 	//create first tiles
-	createTiles(&tile, &pieceVec);
+	createTiles(&tile[rand() % 4], &pieceVec);
 
 	//load grid
 	sf::Sprite grid;
@@ -166,7 +174,7 @@ int main() {
 						for (int k = 0; k < 4; k++) {
 							pieceVec[0].blocks[k].sprite.move(0, -32);
 						}
-						createTiles(&tile, &pieceVec);
+						createTiles(&tile[rand() % 4], &pieceVec);
 						position1 = pieceVec[0].blocks[0].sprite.getPosition();
 						position2 = pieceVec[0].blocks[1].sprite.getPosition();
 						position3 = pieceVec[0].blocks[2].sprite.getPosition();
@@ -200,7 +208,7 @@ int main() {
 			for (int i = 0; i < 4; i++) {
 				pieceVec[0].blocks[i].sprite.move(0, -32);
 			}
-			createTiles(&tile, &pieceVec);
+			createTiles(&tile[rand() % 4], &pieceVec);
 		}
 
 		//move with keyboard entries
@@ -240,7 +248,7 @@ int main() {
 			spritesInRowPos.clear();
 		}
 		if (createNewPiece) {
-			createTiles(&tile, &pieceVec);
+			createTiles(&tile[rand() % 4], &pieceVec);
 		}
 		//window display
 		window.clear(sf::Color::Black);
