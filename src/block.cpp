@@ -65,19 +65,19 @@ void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
     center = this->blocks[3].sprite.getPosition();
   } else if (this->num == 6) {
     //case I
-    center = sf::Vector2f(this->blocks[2].sprite.getPosition().x - 16, this->blocks[2].sprite.getPosition().y - 16);
+    center = sf::Vector2f(this->blocks[2].sprite.getPosition().x - 32, this->blocks[2].sprite.getPosition().y - 32);
     switch (this->state) {
       case 0:
-        center.y += 32;
+        center.y += 64;
         break;
       case 1:
         break;
       case 2:
-        center.x += 32;
+        center.x += 64;
         break;
       case 3:
-        center.x += 32;
-        center.y += 32;
+        center.x += 64;
+        center.y += 64;
         break;
     }
   }
@@ -88,7 +88,7 @@ void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
     currentPos = this->blocks[i].sprite.getPosition();
     newX[i] = center.x - currentPos.y + center.y;
     newY[i] = center.y + currentPos.x - center.x;
-    if (newX[i] < 0 or newX[i] > 320 or newY[i] < 0 or newY[i] > 640) {
+    if (newX[i] < 0 or newX[i] > 640 or newY[i] < 0 or newY[i] > 1280) {
       canRotate = false;
       break;
     }
@@ -128,19 +128,19 @@ void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
     center = this->blocks[3].sprite.getPosition();
   } else if (this->num == 6) {
     //case I
-    center = sf::Vector2f(this->blocks[2].sprite.getPosition().x - 16, this->blocks[2].sprite.getPosition().y - 16);
+    center = sf::Vector2f(this->blocks[2].sprite.getPosition().x - 32, this->blocks[2].sprite.getPosition().y - 32);
     switch (this->state) {
       case 0:
-        center.y += 32;
+        center.y += 64;
         break;
       case 1:
         break;
       case 2:
-        center.x += 32;
+        center.x += 64;
         break;
       case 3:
-        center.x += 32;
-        center.y += 32;
+        center.x += 64;
+        center.y += 64;
         break;
     }
   }
@@ -151,7 +151,7 @@ void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
     currentPos = this->blocks[i].sprite.getPosition();
     newX[i] = center.x + currentPos.y - center.y;
     newY[i] = center.y - currentPos.x + center.x;
-    if (newX[i] < 0 or newX[i] > 320 or newY[i] < 0 or newY[i] > 640) {
+    if (newX[i] < 0 or newX[i] > 640 or newY[i] < 0 or newY[i] > 1280) {
       canRotate = false;
       break;
     }
@@ -180,7 +180,7 @@ void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
 bool Piece::isInRow(int y, std::vector<int>* spritesInRowPos) {
   for (int i = 0; i < 4; i++) {
     this->blocks[i].inRow = false;
-    if (this->blocks[i].sprite.getPosition().y == 32 * y and this->blocks[i].exists) {
+    if (this->blocks[i].sprite.getPosition().y == 64 * y and this->blocks[i].exists) {
       this->blocks[i].inRow = true;
       (*spritesInRowPos).push_back(i);
     } else {
@@ -197,7 +197,7 @@ bool Piece::isInRow(int y, std::vector<int>* spritesInRowPos) {
 
 bool Piece::isInRow(int y) {
   for (int i = 0; i < 4; i++) {
-    if (this->blocks[i].sprite.getPosition().y == 32 * i and this->blocks[i].exists) {
+    if (this->blocks[i].sprite.getPosition().y == 64 * i and this->blocks[i].exists) {
       this->blocks[i].inRow = true;
     } else {
       this->blocks[i].inRow = false;
