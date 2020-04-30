@@ -48,7 +48,11 @@ int main() {
 	sf::SoundBuffer bumpBuffer;
 	sf::SoundBuffer clickBuffer;
 	sf::SoundBuffer blockBuffer;
-
+	//window icon
+	sf::Image icon;
+	//tile and grid textures
+	sf::Texture tile;
+	sf::Texture gridTexture;
 	try {
 		if (!clickBuffer.loadFromFile("content/click.ogg")) {
 			throw 101;
@@ -58,6 +62,15 @@ int main() {
 		}
 		if (!blockBuffer.loadFromFile("content/block.ogg")) {
 			throw 103;
+		}
+		if (!icon.loadFromFile("content/icon.png")) {
+			throw 104;
+		}
+		if (!tile.loadFromFile("content/tile.png")) {
+			throw 105;
+		}
+		if (!gridTexture.loadFromFile("content/grid.png")) {
+			throw 106;
 		}
 	} catch (int i) {
 		std::cerr << "Integer exception cought with value " << i << std::endl;
@@ -72,27 +85,6 @@ int main() {
 	sf::Sound block;
 	block.setBuffer(blockBuffer);
 
-	//tile texture
-	sf::Texture tile;
-	try {
-		if (!tile.loadFromFile("content/tile.png")) {
-			throw 105;
-		}
-	} catch (int i) {
-		std::cerr << "Integer exception cought with value " << i << std::endl;
-		std::cerr << "Exceptions 10X : can't load file content/**" << std::endl;
-	}
-
-	//set window icon
-	sf::Image icon;
-	try {
-		if (!icon.loadFromFile("content/icon.png")) {
-			throw 104;
-		}
-	} catch (int i) {
-		std::cerr << "Integer exception cought with value " << i << std::endl;
-		std::cerr << "Exceptions 10X : can't load file content/**" << std::endl;
-	}
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 	int changeX = 0;
@@ -105,10 +97,15 @@ int main() {
 	//create first tiles
 	createTiles(&tile, &pieceVec);
 
+	//load grid
+	sf::Sprite grid;
+	grid.setTexture(gridTexture);
+	grid.setPosition(sf::Vector2f(0, 0));
+
 	while (window.isOpen()) {
 		//event handling
 		sf::Event evnt;
-		while (window.pollEvent(evnt)) {
+ 		while (window.pollEvent(evnt)) {
 			if (evnt.type == sf::Event::Closed) {
 				window.close();
 			}
@@ -149,10 +146,9 @@ int main() {
 			for (int j = 0; j < 4; j++) {
 				if (pieceVec[i].blocks[j].exists and i != 0) {
 					sf::Vector2f otherTilesPos = pieceVec[i].blocks[j].sprite.getPosition();
-
 					//if tile spawns directly on other tile
-					if (i != 0 and (position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x)) {
-						std::cout << i << std::endl;
+					if (i != 0 and ((position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x))) {
+						std::cout << i << " " << j << std::endl;
 						if (!bump.getStatus()) {
 							bump.play();
 						}
@@ -215,13 +211,14 @@ int main() {
 		//destroy completed line
 		std::vector<int> spritesInRowNum;
 		std::vector<int> spritesInRowPos;
+		bool createNewPiece = false;
 		for (int i = 0; i < 20; i++) {
 			for (int j = 1; j < pieceVec.size(); j++) {
 				if (pieceVec[j].isInRow(i, &spritesInRowPos)) {
 					spritesInRowNum.push_back(j);
 				}
 			}
-			if (spritesInRowNum.size() == 10) {
+			if (spritesInRowPos.size() == 10) {
 				for (int j = 1; j < pieceVec.size(); j++) {
 					for (int k = 0; k < 4; k++) {
 						if (pieceVec[j].blocks[k].inRow and pieceVec[j].blocks[k].exists) {
@@ -236,12 +233,14 @@ int main() {
 						}
 					}
 				}
-				createTiles(&tile, &pieceVec);
+				createNewPiece = true;
 			}
 			spritesInRowNum.clear();
 			spritesInRowPos.clear();
 		}
-
+		if (createNewPiece) {
+			createTiles(&tile, &pieceVec);
+		}
 		//window display
 		window.clear(sf::Color::Black);
 		for (int i = 0; i < pieceVec.size(); i++) {
@@ -251,6 +250,7 @@ int main() {
 				}
 			}
 		}
+		window.draw(grid);
 		window.display();
 	}
 	return 0;

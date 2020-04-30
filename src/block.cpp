@@ -180,7 +180,7 @@ void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
 bool Piece::isInRow(int y, std::vector<int>* spritesInRowPos) {
   for (int i = 0; i < 4; i++) {
     this->blocks[i].inRow = false;
-    if (this->blocks[i].sprite.getPosition().y == 32 * i and this->blocks[i].exists) {
+    if (this->blocks[i].sprite.getPosition().y == 32 * y and this->blocks[i].exists) {
       this->blocks[i].inRow = true;
       (*spritesInRowPos).push_back(i);
     } else {
