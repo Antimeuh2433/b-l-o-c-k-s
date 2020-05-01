@@ -20,6 +20,7 @@ class Piece {
     void rotateCounterClockwise(std::vector<Piece>* pieceVec);
     bool isInRow(int y, std::vector<int>* spritesInRowPos);
     bool isInRow(int y);
+    bool testRotation(int newX[], int newY[], int test, int state, bool isClockWise, bool isI, std::vector<Piece>* pieceVec);
     Block blocks[4];
   private:
     short int num;

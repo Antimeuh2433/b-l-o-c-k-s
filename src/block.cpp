@@ -51,6 +51,124 @@ Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile) : n
   }
 }
 
+bool Piece::testRotation(int newX[], int newY[], int test, int state, bool isClockWise, bool isI, std::vector<Piece>* pieceVec) {
+  int deltaX = 0;
+  int deltaY = 0;
+  if (!isI) {
+    if (test == 1) {
+      if ((isClockWise and state == 0) or (!isClockWise and state == 2) or state == 3) {
+        deltaX = -1;
+      } else {
+        deltaX = 1;
+      }
+    } else if (test == 2) {
+      if ((isClockWise and state == 0) or (!isClockWise and state == 2)) {
+        deltaX = -1;
+        deltaY = 1;
+      } else if (state == 3) {
+        deltaX = -1;
+        deltaY = -1;
+      } else if (state == 1) {
+        deltaX = 1;
+        deltaY = -1;
+      } else {
+        deltaX = 1;
+        deltaY = 1;
+      }
+    } else if (test == 3) {
+      if (state == 0 or state == 2) {
+        deltaY = -2;
+      } else {
+        deltaY = 2;
+      }
+    } else if (test == 4) {
+      if ((state == 0 and isClockWise) or (state == 2 and !isClockWise)) {
+        deltaX = -1;
+        deltaY = -2;
+      } else if (state == 1) {
+        deltaX = 1;
+        deltaY = 2;
+      } else if ((state == 2 and isClockWise) or (state == 0 and !isClockWise)) {
+        deltaX = 1;
+        deltaY = -2;
+      } else {
+        deltaX = -1;
+        deltaY = 2;
+      }
+    }
+  } else {
+    if (test == 1) {
+      if ((state == 0 and isClockWise) or (state == 3 and !isClockWise)) {
+        deltaX = -2;
+      } else if ((state == 1 and !isClockWise) or (state == 2 and isClockWise)) {
+        deltaX = 2;
+      } else if ((state == 2 and !isClockWise) or (state == 3 and isClockWise)) {
+        deltaX = 1;
+      } else {
+        deltaX = -1;
+      }
+    } else if (test == 2) {
+      if ((state = 0 and isClockWise) or (state == 3 and !isClockWise)) {
+        deltaX = 1;
+      } else if ((state == 1 and !isClockWise) or (state == 2 and isClockWise)) {
+        deltaX = -1;
+      } else if ((state == 1 and isClockWise) or (state == 0 and !isClockWise)) {
+        deltaX = 2;
+      } else {
+        deltaY = -2;
+      }
+    } else if (test == 3) {
+      if ((state == 0 and isClockWise) or (state == 3 and !isClockWise)) {
+        deltaX = -2;
+        deltaY = -1;
+      } else if ((state == 1 and !isClockWise) or (state == 2 and isClockWise)) {
+        deltaX = 2;
+        deltaY = 1;
+      } else if ((state == 1 and isClockWise) or (state == 0 and !isClockWise)) {
+        deltaX = -1;
+        deltaY = 2;
+      } else {
+        deltaX = 1;
+        deltaY = -2;
+      }
+    } else if (test == 4) {
+      if (state == 1) {
+        deltaX = 1;
+        deltaY = 2;
+      } else if ((state == 0 and isClockWise) or (state == 2 and !isClockWise)) {
+        deltaX = -1;
+        deltaY = -2;
+      } else if (state == 3) {
+        deltaX = -1;
+        deltaY = 2;
+      } else {
+        deltaX = 1;
+        deltaY = -2;
+      }
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    newX[i] += deltaX * 64;
+    newY[i] += deltaY * 64;
+  }
+  //checks if possible
+  for (int i = 0; i < 4; i++) {
+    if (newX[i] < 0 or newX[i] > 640 or newY[i] < 0 or newY[i] > 1280) {
+      return false;
+    }
+    for (int j = 0; j < (*pieceVec).size(); j++) {
+      for (int k = 0; k < 4; k++) {
+        Piece &otherPiece = (*pieceVec)[j];
+        sf::Vector2f otherTilePos = otherPiece.blocks[k].sprite.getPosition();
+        if (otherTilePos.x == newX[i] and otherTilePos.y == newY[i]) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
 void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
   if (this->num == 3) {
     //case O
@@ -81,26 +199,24 @@ void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
         break;
     }
   }
-  bool canRotate = true;
-  short int newX[4], newY[4];
+  bool canRotate = false;
+  int newX[4], newY[4];
   sf::Vector2f currentPos, otherTilePos;
-  for (int i = 0; i < 4; i++) {
-    currentPos = this->blocks[i].sprite.getPosition();
-    newX[i] = center.x - currentPos.y + center.y;
-    newY[i] = center.y + currentPos.x - center.x;
-    if (newX[i] < 0 or newX[i] > 640 or newY[i] < 0 or newY[i] > 1280) {
-      canRotate = false;
-      break;
-    }
-    for (int j = 1; j < (*pieceVec).size(); j++) {
-      for (int k = 0; k < 4; k++) {
-        Piece &otherPiece = (*pieceVec)[j];
-        otherTilePos = otherPiece.blocks[k].sprite.getPosition();
-        if (otherTilePos.x == newX[i] and otherTilePos.y == newY[i]) {
-          canRotate = false;
-          break;
-        }
+  bool isI;
+  for (int test = 0; test < 5; test++) {
+    for (int i = 0; i < 4; i++) {
+      currentPos = this->blocks[i].sprite.getPosition();
+      newX[i] = center.x - currentPos.y + center.y;
+      newY[i] = center.y + currentPos.x - center.x;
+      if (this->num == 6) {
+        isI = true;
+      } else {
+        isI = false;
       }
+    }
+    canRotate = this->testRotation(newX, newY, test, this->state, true, isI, pieceVec);
+    if (canRotate) {
+      break;
     }
   }
   if (canRotate) {
