@@ -154,13 +154,21 @@ bool Piece::testRotation(int newX[], int newY[], int test, int state, bool isClo
   //checks if possible
   for (int i = 0; i < 4; i++) {
     if (newX[i] < 0 or newX[i] > 640 or newY[i] < 0 or newY[i] > 1280) {
+      for (int j = 0; j < 4; j++) {
+        newX[i] -= deltaX * 64;
+        newY[i] -= deltaX * 64;
+      }
       return false;
     }
-    for (int j = 0; j < (*pieceVec).size(); j++) {
+    for (int j = 1; j < (*pieceVec).size(); j++) {
       for (int k = 0; k < 4; k++) {
         Piece &otherPiece = (*pieceVec)[j];
         sf::Vector2f otherTilePos = otherPiece.blocks[k].sprite.getPosition();
         if (otherTilePos.x == newX[i] and otherTilePos.y == newY[i]) {
+          for (int l = 0; l < 4; l++) {
+            newX[i] -= deltaX * 64;
+            newY[i] -= deltaY * 64;
+          }
           return false;
         }
       }
@@ -208,11 +216,11 @@ void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
       currentPos = this->blocks[i].sprite.getPosition();
       newX[i] = center.x - currentPos.y + center.y;
       newY[i] = center.y + currentPos.x - center.x;
-      if (this->num == 6) {
-        isI = true;
-      } else {
-        isI = false;
-      }
+    }
+    if (this->num == 6) {
+      isI = true;
+    } else {
+      isI = false;
     }
     canRotate = this->testRotation(newX, newY, test, this->state, true, isI, pieceVec);
     if (canRotate) {
@@ -269,11 +277,11 @@ void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
       currentPos = this->blocks[i].sprite.getPosition();
       newX[i] = center.x + currentPos.y - center.y;
       newY[i] = center.y - currentPos.x + center.x;
-      if (this->num == 6) {
-        isI = true;
-      } else {
-        isI = false;
-      }
+    }
+    if (this->num == 6) {
+      isI = true;
+    } else {
+      isI = false;
     }
     canRotate = this->testRotation(newX, newY, test, this->state, false, isI, pieceVec);
   }
