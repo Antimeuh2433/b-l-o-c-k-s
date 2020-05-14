@@ -75,7 +75,8 @@
     "utility": "cpp",
     "variant": "cpp",
     "*.tcc": "cpp",
-    "hashtable": "cpp"
+    "hashtable": "cpp",
+    "cinttypes": "cpp"
   },
   "terminal.integrated.shell.windows": "cmd.exe",
   "git.enableCommitSigning": true

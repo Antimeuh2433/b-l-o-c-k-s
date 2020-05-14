@@ -45,7 +45,7 @@ fi
 mkdir $INSTALLDIR
 echo "Compiling, please wait..."
 clang++ -Wall -c -I../include/ -o main.o ../src/main.cpp 
-clang++ -Wall -c -I../include/ -o graphics.o ../include/SFML/Graphics.hpp
+clang++ -Wall -c -I../include -o block.o ../src/block.cpp
 clang++ -Wall -L../lib/Linux -L/lib -L/usr/lib -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -o main main.o
 echo "Cleaning up..."
 sudo rm ./*.o

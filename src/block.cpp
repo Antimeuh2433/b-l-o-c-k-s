@@ -1,3 +1,19 @@
+// B-L-0-C-K-S - Proof of Concept block game inspired by Tetris
+// Copyright (C) 2020  Justin BAX and Chris YANG
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #include "block.h"
 #include <SFML/Graphics.hpp>
 
@@ -210,19 +226,13 @@ void Piece::rotateClockwise(std::vector<Piece>* pieceVec) {
   bool canRotate = false;
   int newX[4], newY[4];
   sf::Vector2f currentPos, otherTilePos;
-  bool isI;
   for (int test = 0; test < 5; test++) {
     for (int i = 0; i < 4; i++) {
       currentPos = this->blocks[i].sprite.getPosition();
       newX[i] = center.x - currentPos.y + center.y;
       newY[i] = center.y + currentPos.x - center.x;
     }
-    if (this->num == 6) {
-      isI = true;
-    } else {
-      isI = false;
-    }
-    canRotate = this->testRotation(newX, newY, test, this->state, true, isI, pieceVec);
+    canRotate = this->testRotation(newX, newY, test, this->state, true, this->num == 6, pieceVec);
     if (canRotate) {
       break;
     }
@@ -271,19 +281,13 @@ void Piece::rotateCounterClockwise(std::vector<Piece>* pieceVec) {
   bool canRotate = true;
   int newX[4], newY[4];
   sf::Vector2f currentPos, otherTilePos;
-  bool isI;
   for (int test = 0; test < 5; test++) {
     for (int i = 0; i < 4; i++) {
       currentPos = this->blocks[i].sprite.getPosition();
       newX[i] = center.x + currentPos.y - center.y;
       newY[i] = center.y - currentPos.x + center.x;
     }
-    if (this->num == 6) {
-      isI = true;
-    } else {
-      isI = false;
-    }
-    canRotate = this->testRotation(newX, newY, test, this->state, false, isI, pieceVec);
+    canRotate = this->testRotation(newX, newY, test, this->state, false, this->num == 6, pieceVec);
   }
   if (canRotate) {
     this->state--;

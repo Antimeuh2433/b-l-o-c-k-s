@@ -26,16 +26,15 @@ fi
 mkdir $INSTALLDIR
 echo "Compiling, please wait..."
 clang++ -std=c++11 -Wall -c -I./include/ -o main.o ./src/main.cpp 
-clang++ -std=c++11 -Wall -c -I./include/ -o graphics.o ./include/SFML/Graphics.hpp
 clang++ -std=c++11 -Wall -c -I./include/ -o block.o ./src/block.cpp
-clang++ -std=c++11 -Wall -L/usr/local/Cellar/sfml/2.5.1/lib -L./lib/OSX -rpath ./lib/OSX/extlibs -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o main main.o block.o
+clang++ -std=c++11 -Wall -L/usr/local/Cellar/sfml/2.5.1/lib -L./lib/OSX -rpath ./lib/OSX/extlibs -lstdc++ -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o b-l-o-c-k-s main.o block.o
 echo "Cleaning up..."
 rm ./*.o
 echo "Compilation Process Completed, moving binaries to $INSTALLDIR"
-mv ./main $INSTALLDIR
+mv ./b-l-o-c-k-s $INSTALLDIR
 echo "Updating permissions"
-chown root:admin $INSTALLDIR/main
-chmod 755 $INSTALLDIR/main
+chown root:admin $INSTALLDIR/b-l-o-c-k-s
+chmod 755 $INSTALLDIR/b-l-o-c-k-s
 echo "All Done :D"
 echo "To run the program, simply run ./bin/b-l-o-c-k-s"
 

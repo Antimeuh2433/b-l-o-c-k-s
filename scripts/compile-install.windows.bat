@@ -29,13 +29,13 @@ echo Installing to %installDIR%
 
 echo Compiling, please wait...
 g++ -Wall -c -I..\include\ -o main.o ..\src\main.cpp 
-g++ -Wall -c -I..\include\ -o graphics.o ..\include\SFML\Graphics.hpp
-g++ -Wall -L..\lib\Windows -lsfml-graphics-2 -lsfml-window-2 -lsfml-system-2 -o main main.o
+g++ -Wall -c -I..\include\ -o block.o ..\src\block.cpp
+g++ -Wall -L..\lib\Windows -lsfml-graphics-2 -lsfml-window-2 -lsfml-system-2 -lsfml-audio-2 -o main.exe main.o block.o
 echo Cleaning up...
-del .\*.o
+# del .\*.o
 echo Compiling Process Completed, moving Install into installation directory at %installDIR%
 copy ..\lib\Windows\*.dll %installDIR%\*.dll
-xcopy /E /I ..\content .\bin\content
+xcopy /E /I ..\content ..\bin\content
 move .\main.exe %installDIR%\main.exe
 ren %installDIR%\*.exe b-l-o-c-k-s.exe
 echo All Done! :D

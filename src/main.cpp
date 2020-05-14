@@ -24,6 +24,10 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
+#ifdef __BUILD_APPLICATION_OSX__
+#include <CoreFoundation.framework/Versions/A/Headers/CoreFoundation.h>
+#endif
+
 void createTiles(sf::Texture* tile, std::vector<Piece>* pieceVec) {	
 	short int shapenum = rand() % 7;
 	Piece* ptr = new Piece(shapenum, pieceVec, tile);
@@ -52,32 +56,45 @@ int main() {
 	//tile and grid textures
 	sf::Texture tile[4];
 	sf::Texture gridTexture;
+
+	#ifdef __BUILD_APPLICATION_OSX__
+		CFBundleRef mainBundle = CFBundleGetMainBundle();
+		CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+		char path[512];
+		if (!CFURLGetFileSystemRepresentation(resourcesURL, true, (UInt8*)path, 512)) {
+			std::cerr << "Can't find resources path" << std::endl;
+		}
+		CFRelease(resourcesURL);
+	#else
+		std::string path = "content";
+	#endif
+
 	try {
-		if (!clickBuffer.loadFromFile("content/click.ogg")) {
+		if (!clickBuffer.loadFromFile(std::string(path + std::string("/click.ogg")))) {
 			throw 101;
 		}
-		if (!bumpBuffer.loadFromFile("content/bump.ogg")) {
+		if (!bumpBuffer.loadFromFile(std::string(path + std::string("/bump.ogg")))) {
 			throw 102;
 		}
-		if (!blockBuffer.loadFromFile("content/block.ogg")) {
+		if (!blockBuffer.loadFromFile(std::string(path + std::string("/block.ogg")))) {
 			throw 103;
 		}
-		if (!icon.loadFromFile("content/icon.png")) {
+		if (!icon.loadFromFile(std::string(path + std::string("/icon.png")))) {
 			throw 104;
 		}
-		if (!gridTexture.loadFromFile("content/grid.png")) {
+		if (!gridTexture.loadFromFile(std::string(path + std::string("/grid.png")))) {
 			throw 105;
 		}
-		if (!tile[0].loadFromFile("content/tiles/tile-01.png")) {
+		if (!tile[0].loadFromFile(std::string(path + std::string("/tiles/tile-01.png")))) {
 			throw 106;
 		}
-		if (!tile[1].loadFromFile("content/tiles/tile-02.png")) {
+		if (!tile[1].loadFromFile(std::string(path + std::string("/tiles/tile-02.png")))) {
 			throw 107;
 		}
-		if (!tile[2].loadFromFile("content/tiles/tile-03.png")) {
+		if (!tile[2].loadFromFile(std::string(path + std::string("/tiles/tile-03.png")))) {
 			throw 108;
 		}
-		if (!tile[3].loadFromFile("content/tiles/tile-04.png")) {
+		if (!tile[3].loadFromFile(std::string(path + std::string("/tiles/tile-04.png")))) {
 			throw 109;
 		}
 	} catch (int i) {
@@ -158,7 +175,6 @@ int main() {
 					sf::Vector2f otherTilesPos = pieceVec[i].blocks[j].sprite.getPosition();
 					//if tile spawns directly on other tile
 					if (i != 0 and ((position1.y == otherTilesPos.y and position1.y == 0 and position1.x == otherTilesPos.x) or (position2.y == otherTilesPos.y and position2.y == 0 and position2.x == otherTilesPos.x) or (position3.y == otherTilesPos.y and position3.y == 0 and position3.x == otherTilesPos.x) or (position4.y == otherTilesPos.y and position4.y == 0 and position4.x == otherTilesPos.x))) {
-						std::cout << i << " " << j << std::endl;
 						if (!bump.getStatus()) {
 							bump.play();
 						}
