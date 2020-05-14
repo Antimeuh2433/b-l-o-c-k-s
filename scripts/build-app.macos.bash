@@ -34,5 +34,10 @@ install_name_tool -change ./lib/OSX/libsfml-graphics.2.5.1.dylib @executable_pat
 install_name_tool -change ./lib/OSX/libsfml-window.2.5.1.dylib @executable_path/libsfml-window.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
 install_name_tool -change ./lib/OSX/libsfml-system.2.5.1.dylib @executable_path/libsfml-system.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
 install_name_tool -change ./lib/OSX/libsfml-audio.2.5.1.dylib @executable_path/libsfml-audio.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
+
+install_name_tool -change /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib @executable_path/libsfml-graphics.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
+install_name_tool -change /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib @executable_path/libsfml-window.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
+install_name_tool -change /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib @executable_path/libsfml-system.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
+install_name_tool -change /usr/local/opt/sfml/lib/libsfml-audio.2.5.dylib @executable_path/libsfml-audio.2.5.1.dylib b-l-o-c-k-s.app/Contents/MacOS/b-l-o-c-k-s
 echo -n "done"
 echo
