@@ -31,12 +31,13 @@ class Block {
 
 class Piece {
   public:
-    Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile);
-    void rotateClockwise(std::vector<Piece>* pieceVec);
-    void rotateCounterClockwise(std::vector<Piece>* pieceVec);
-    bool isInRow(int y, std::vector<int>* spritesInRowPos);
-    bool isInRow(int y);
-    bool testRotation(int newX[], int newY[], int test, int state, bool isClockWise, bool isI, std::vector<Piece>* pieceVec);
+    Piece(short int, std::vector<Piece>*, sf::Texture*, sf::RenderWindow*);
+    void updateSize(sf::RenderWindow*);
+    void rotateClockwise(std::vector<Piece>*);
+    void rotateCounterClockwise(std::vector<Piece>*);
+    bool isInRow(int, std::vector<int>*);
+    bool isInRow(int);
+    bool testRotation(int[], int[], int, int, bool, bool, std::vector<Piece>*);
     Block blocks[4];
   private:
     short int num;

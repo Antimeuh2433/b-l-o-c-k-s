@@ -18,7 +18,6 @@
 #include <SFML/Graphics.hpp>
 
 Block::Block() {
-  this->sprite.setScale(4, 4);
   this->inRow = false;
   this->exists = true;
 }
@@ -30,7 +29,7 @@ void Block::die() {
   this->sprite.setScale(0, 0);
 }
 
-Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile) : num(num) { 
+Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile, sf::RenderWindow* window) : num(num) { 
   bool shapes[7][8] = {	
 	  {false, true, false, false, true, true, true, false}, // T
 	  {false, false, true, false, true, true, true, false}, // L
@@ -64,6 +63,13 @@ Piece::Piece(short int num, std::vector<Piece>* pieceVec, sf::Texture* tile) : n
       }
       a++;
     }
+  }
+  this->updateSize(window);
+}
+
+void Piece::updateSize(sf::RenderWindow* window) {
+  for (int i = 0; i < 4; i++) {
+    this->blocks[i].sprite.setScale(sf::Vector2f((*window).getSize().x / 160, (*window).getSize().y / 320));
   }
 }
 

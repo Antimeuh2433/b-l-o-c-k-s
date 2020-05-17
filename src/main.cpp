@@ -28,9 +28,9 @@
 #include <CoreFoundation.framework/Versions/A/Headers/CoreFoundation.h>
 #endif
 
-void createTiles(sf::Texture* tile, std::vector<Piece>* pieceVec) {	
+void createTiles(sf::Texture* tile, std::vector<Piece>* pieceVec, sf::RenderWindow* window) {	
 	short int shapenum = rand() % 7;
-	Piece* ptr = new Piece(shapenum, pieceVec, tile);
+	Piece* ptr = new Piece(shapenum, pieceVec, tile, window);
 	std::vector<Piece>::iterator it;
 	it = (*pieceVec).begin();
 	it = (*pieceVec).insert(it, *ptr);
@@ -120,7 +120,7 @@ int main() {
 	std::vector<Piece> pieceVec;
 
 	//create first tiles
-	createTiles(&tile[rand() % 4], &pieceVec);
+	createTiles(&tile[rand() % 4], &pieceVec, &window);
 
 	//load grid
 	sf::Sprite grid;
@@ -135,6 +135,14 @@ int main() {
  		while (window.pollEvent(evnt)) {
 			if (evnt.type == sf::Event::Closed) {
 				window.close();
+			} else if (evnt.type == sf::Event::Resized) {
+				//resize event
+				grid.setScale(sf::Vector2f(evnt.size.width / 160, evnt.size.height / 320));
+				for (int i = 0; i < pieceVec.size(); i++) {
+					for (int j = 0; j < 4; j++) {
+						pieceVec[i].blocks[j].sprite.setScale(sf::Vector2f(evnt.size.width / 160, evnt.size.height / 320));
+					}
+				}
 			}
 			//key pressed event
 			else if (evnt.type == sf::Event::KeyPressed) {
@@ -191,7 +199,7 @@ int main() {
 						for (int k = 0; k < 4; k++) {
 							pieceVec[0].blocks[k].sprite.move(0, -64);
 						}
-						createTiles(&tile[rand() % 4], &pieceVec);
+						createTiles(&tile[rand() % 4], &pieceVec, &window);
 						position1 = pieceVec[0].blocks[0].sprite.getPosition();
 						position2 = pieceVec[0].blocks[1].sprite.getPosition();
 						position3 = pieceVec[0].blocks[2].sprite.getPosition();
@@ -225,7 +233,7 @@ int main() {
 			for (int i = 0; i < 4; i++) {
 				pieceVec[0].blocks[i].sprite.move(0, -64);
 			}
-			createTiles(&tile[rand() % 4], &pieceVec);
+			createTiles(&tile[rand() % 4], &pieceVec, &window);
 		}
 
 		//move with keyboard entries
